@@ -452,59 +452,150 @@ function updateCanvas() {
 
 // Shape management functions
 function addShape() {
+    // Check if there's a selected shape to copy
+    if (selectedShapeId !== null) {
+        // Copy the selected shape with position offset
+        copyShape();
+        return;
+    }
+    
+    // No shape selected - create new shape with values from property panel
     const shapeType = document.getElementById('shapeType').value;
     
     const newShape = {
         id: nextShapeId++,
         type: shapeType,
-        zOrder: getShapeZOrder(shapeType), // Add z-order based on shape type
-        f1: '#000000', // border color
-        f2: '#ff0000', // fill color
-        s: '1'         // border style
+        zOrder: getShapeZOrder(shapeType) // Add z-order based on shape type
     };
     
     if (shapeType === 'ellipse' || shapeType === 'rectangle') {
-        // Ellipse and Rectangle use x, y, w, h format
-        newShape.x = 50;   // x-coordinate (top-left)
-        newShape.y = 50;   // y-coordinate (top-left)
-        newShape.w = 100;  // width
-        newShape.h = 100;  // height
+        // Ellipse and Rectangle use x, y, w, h format - read from properties panel
+        newShape.f1 = document.getElementById('borderColor').value || '#000000'; // border color
+        newShape.f2 = document.getElementById('fillColor').value || '#ff0000';   // fill color
+        newShape.s = document.getElementById('borderStyle').value || '1';        // border style
+        newShape.x = parseInt(document.getElementById('positionX').value) || 50;   // x-coordinate (top-left)
+        newShape.y = parseInt(document.getElementById('positionY').value) || 50;   // y-coordinate (top-left)
+        newShape.w = parseInt(document.getElementById('shapeWidth').value) || 100; // width
+        newShape.h = parseInt(document.getElementById('shapeHeight').value) || 100; // height
     } else if (shapeType === 'line') {
-        // Line uses x1, y1, x2, y2, f, s format
-        newShape.x1 = 50;   // start x-coordinate
-        newShape.y1 = 50;   // start y-coordinate
-        newShape.x2 = 150;  // end x-coordinate
-        newShape.y2 = 150;  // end y-coordinate
-        newShape.f = '#000000'; // line color
-        // Remove f1, f2 for lines (not applicable)
-        delete newShape.f1;
-        delete newShape.f2;
+        // Line uses x1, y1, x2, y2, f, s format - read from properties panel
+        newShape.x1 = parseInt(document.getElementById('lineX1').value) || 50;   // start x-coordinate
+        newShape.y1 = parseInt(document.getElementById('lineY1').value) || 50;   // start y-coordinate
+        newShape.x2 = parseInt(document.getElementById('lineX2').value) || 150;  // end x-coordinate
+        newShape.y2 = parseInt(document.getElementById('lineY2').value) || 150;  // end y-coordinate
+        newShape.f = document.getElementById('borderColor').value || '#000000';   // line color
+        newShape.s = document.getElementById('borderStyle').value || '1';         // border style
     } else if (shapeType === 'v_separator') {
-        // V_SEPARATOR uses x, w, color, pen format
-        newShape.x = 300;          // x position (horizontal position)
-        newShape.w = 2;            // line weight
-        newShape.color = '#000000'; // color
-        newShape.pen = '1';        // pen style (1=solid, 2=dashed, 3=dotted, 4=dashed and dotted)
-        // Remove f1, f2, s for v_separator (use color and pen instead)
-        delete newShape.f1;
-        delete newShape.f2;
-        delete newShape.s;
+        // V_SEPARATOR uses x, w, color, pen format - read from properties panel
+        const vSepX = document.getElementById('vSepX');
+        const vSepWidth = document.getElementById('vSepWidth');
+        const vSepColor = document.getElementById('vSepColor');
+        const vSepPen = document.getElementById('vSepPen');
+        
+        newShape.x = parseInt(vSepX?.value) || 300;          // x position (horizontal position)
+        newShape.w = parseInt(vSepWidth?.value) || 2;        // line weight
+        newShape.color = vSepColor?.value || '#000000';      // color
+        newShape.pen = vSepPen?.value || '1';               // pen style
     } else if (shapeType === 'h_separator') {
-        // H_SEPARATOR uses y, h, color, pen format
-        newShape.y = 200;          // y position (vertical position)
-        newShape.h = 2;            // line weight (height/thickness)
-        newShape.color = '#000000'; // color
-        newShape.pen = '1';        // pen style (1=solid, 2=dashed, 3=dotted, 4=dashed and dotted)
-        // Remove f1, f2, s for h_separator (use color and pen instead)
-        delete newShape.f1;
-        delete newShape.f2;
-        delete newShape.s;
+        // H_SEPARATOR uses y, h, color, pen format - read from properties panel
+        const hSepY = document.getElementById('hSepY');
+        const hSepHeight = document.getElementById('hSepHeight');
+        const hSepColor = document.getElementById('hSepColor');
+        const hSepPen = document.getElementById('hSepPen');
+        
+        newShape.y = parseInt(hSepY?.value) || 200;          // y position (vertical position)
+        newShape.h = parseInt(hSepHeight?.value) || 2;       // line weight (height/thickness)
+        newShape.color = hSepColor?.value || '#000000';      // color
+        newShape.pen = hSepPen?.value || '1';               // pen style
     }
     
     // Add new shape to the end of the array (user controls order)
     shapes.push(newShape);
     
     selectedShapeId = newShape.id;
+    updateShapeControls();
+    updateShapesList();
+    updateCanvas();
+    saveState();
+}
+
+function copyShape() {
+    // Only copy if there's a selected shape
+    if (selectedShapeId === null) {
+        return;
+    }
+    
+    const originalShape = getShapeById(selectedShapeId);
+    if (!originalShape) {
+        return;
+    }
+    
+    // Create a deep copy of the selected shape
+    const copiedShape = JSON.parse(JSON.stringify(originalShape));
+    copiedShape.id = nextShapeId++;
+    
+    // Offset position to make the copy visible
+    const offset = 20; // 20 pixels offset
+    
+    if (copiedShape.type === 'ellipse' || copiedShape.type === 'rectangle') {
+        // For ellipse/rectangle: offset x and y position
+        copiedShape.x += offset;
+        copiedShape.y += offset;
+        
+        // Keep within canvas bounds
+        const canvas = document.getElementById('myCanvas');
+        const maxX = canvas.width - (copiedShape.w || 100);
+        const maxY = canvas.height - (copiedShape.h || 100);
+        
+        if (copiedShape.x > maxX) copiedShape.x = Math.max(0, maxX);
+        if (copiedShape.y > maxY) copiedShape.y = Math.max(0, maxY);
+        
+    } else if (copiedShape.type === 'line') {
+        // For line: offset both start and end points
+        copiedShape.x1 += offset;
+        copiedShape.y1 += offset;
+        copiedShape.x2 += offset;
+        copiedShape.y2 += offset;
+        
+        // Keep within canvas bounds
+        const canvas = document.getElementById('myCanvas');
+        if (copiedShape.x1 >= canvas.width || copiedShape.x2 >= canvas.width) {
+            const xShift = Math.min(copiedShape.x1, copiedShape.x2) - offset;
+            copiedShape.x1 = copiedShape.x1 - xShift;
+            copiedShape.x2 = copiedShape.x2 - xShift;
+        }
+        if (copiedShape.y1 >= canvas.height || copiedShape.y2 >= canvas.height) {
+            const yShift = Math.min(copiedShape.y1, copiedShape.y2) - offset;
+            copiedShape.y1 = copiedShape.y1 - yShift;
+            copiedShape.y2 = copiedShape.y2 - yShift;
+        }
+        
+    } else if (copiedShape.type === 'v_separator') {
+        // For v_separator: offset x position
+        copiedShape.x += offset;
+        
+        // Keep within canvas bounds
+        const canvas = document.getElementById('myCanvas');
+        if (copiedShape.x >= canvas.width) {
+            copiedShape.x = canvas.width - offset;
+        }
+        
+    } else if (copiedShape.type === 'h_separator') {
+        // For h_separator: offset y position
+        copiedShape.y += offset;
+        
+        // Keep within canvas bounds
+        const canvas = document.getElementById('myCanvas');
+        if (copiedShape.y >= canvas.height) {
+            copiedShape.y = canvas.height - offset;
+        }
+    }
+    
+    // Add copied shape to the end of the array (user controls order)
+    shapes.push(copiedShape);
+    
+    // Select the newly created copy
+    selectedShapeId = copiedShape.id;
     updateShapeControls();
     updateShapesList();
     updateCanvas();
@@ -629,6 +720,22 @@ function updateShapeControls() {
             if (hSepHeight) hSepHeight.value = 2;
             if (hSepColor) hSepColor.value = '#000000';
             if (hSepPen) hSepPen.value = '1';
+        }
+    }
+    
+    // Update add button text based on selection state
+    updateAddButtonText();
+}
+
+function updateAddButtonText() {
+    const addBtn = document.querySelector('button[onclick="addShape()"]');
+    if (addBtn) {
+        if (selectedShapeId !== null) {
+            addBtn.innerHTML = '📋 Copy Selected Shape';
+            addBtn.style.backgroundColor = '#17a2b8'; // Blue for copy
+        } else {
+            addBtn.innerHTML = '+ Add New Shape';
+            addBtn.style.backgroundColor = '#28a745'; // Green for new
         }
     }
 }

@@ -273,13 +273,13 @@ body {
 }
 
 .panel[data-panel="shapelist"] {
-    flex: 1;
+    flex: 1.33;
     min-width: 250px;
 }
 
 .panel[data-panel="properties"] {
-    flex: 1;
-    min-width: 300px;
+    flex: 0.67;
+    min-width: 200px;
 }
 
 canvas {

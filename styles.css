@@ -1,0 +1,618 @@
+body {
+    margin: 0;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    box-sizing: border-box;
+    height: 100vh;
+    overflow-x: auto;
+}
+
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+}
+
+/* Optional: Add overlay effect when sidebar is open */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.1);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-content {
+    padding: 80px 20px 20px 20px;
+}
+
+.sidebar-tab {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 60px;
+    background: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: left 0.3s ease;
+    z-index: 1001;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+}
+
+.sidebar-tab:hover {
+    background: #0056b3;
+}
+
+.sidebar.open + .sidebar-tab {
+    left: 280px;
+}
+
+.sidebar-tab span {
+    font-size: 18px;
+}
+
+.main-layout {
+    display: flex;
+    gap: 20px;
+    margin: 0 auto;
+    height: calc(100vh - 40px);
+    position: relative;
+}
+
+/* Drop zone indicators */
+.main-layout::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -10px;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.main-layout.drag-active::before {
+    background: #007acc;
+    left: -10px;
+}
+
+.main-layout::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -10px;
+    width: 4px;
+    height: 100%;
+    background: transparent;
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    z-index: 999;
+}
+
+.main-layout.drag-active::after {
+    background: #007acc;
+    right: -10px;
+}
+
+/* Draggable Panel System */
+.panel {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    min-width: 250px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel.dragging {
+    opacity: 0.7;
+    transform: rotate(2deg) scale(0.98);
+    z-index: 1000;
+    border: 2px dashed #007acc;
+}
+
+.panel.drag-over {
+    border: 2px solid #007acc;
+    background-color: rgba(0, 122, 204, 0.05);
+    position: relative;
+}
+
+.panel.drag-over::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -12px;
+    width: 4px;
+    height: 100%;
+    background: #007acc;
+    border-radius: 2px;
+    z-index: 1001;
+    animation: pulse 1s infinite;
+}
+
+.panel.drag-over::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: -12px;
+    width: 4px;
+    height: 100%;
+    background: #007acc;
+    border-radius: 2px;
+    z-index: 1001;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.panel-header {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border-radius: 6px 6px 0 0;
+    padding: 12px 16px;
+    border-bottom: 1px solid #dee2e6;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: grab;
+    user-select: none;
+}
+
+.panel-header:active {
+    cursor: grabbing;
+}
+
+.panel-title {
+    font-weight: 600;
+    color: #495057;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.drag-handle {
+    color: #6c757d;
+    font-size: 18px;
+    cursor: grab;
+    transform: rotate(90deg);
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.panel-header:hover .drag-handle {
+    opacity: 1;
+}
+
+.panel-content {
+    padding: 0;
+    overflow: hidden;
+    border-radius: 0 0 8px 8px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Adjust existing containers to fit within panels */
+.canvas-container {
+    background: transparent;
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+}
+
+.shapes-list-container {
+    background: transparent;
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: none;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.controls-container {
+    width: 100%;
+    background: transparent;
+    border-radius: 0;
+    padding: 20px;
+    box-shadow: none;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+/* Panel sizing */
+.panel[data-panel="canvas"] {
+    flex: 2;
+    min-width: 400px;
+}
+
+.panel[data-panel="shapelist"] {
+    flex: 1;
+    min-width: 250px;
+}
+
+.panel[data-panel="properties"] {
+    flex: 1;
+    min-width: 300px;
+}
+
+canvas {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+    cursor: default;
+    user-select: none;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+/* Special control group for shapes list - uses full height */
+.shapes-list-container .control-group {
+    margin-bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.shapes-list-container .control-group label {
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.control-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.control-group input[type="color"] {
+    height: 40px;
+    padding: 2px;
+}
+
+.control-group input[type="range"] {
+    margin-bottom: 5px;
+}
+
+.control-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Side-by-side control layout */
+.control-row {
+    display: flex;
+    gap: 10px;
+}
+
+.control-half {
+    flex: 1;
+}
+
+.control-half label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.control-half input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.range-value {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.status-indicator {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+}
+
+.status-indicator.show {
+    opacity: 1;
+}
+
+h3 {
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+.shapes-list {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+    min-height: 200px;
+}
+
+.shape-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 12px;
+    margin-bottom: 4px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.shape-item:hover {
+    background-color: #e9ecef;
+}
+
+.shape-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.shape-item.selected:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: white; /* Ensure white text remains */
+}
+
+.shape-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.shape-preview {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border: 1px solid #666;
+    display: inline-block;
+}
+
+.shape-preview.dual-color {
+    border-width: 2px;
+    /* Remove default border since we're using the colored border */
+    border-color: transparent;
+}
+
+.shape-details {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover:not(:disabled) {
+    background: #c82333;
+}
+
+.delete-btn:disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+/* Conditional property visibility */
+.ellipse-rectangle-only {
+    display: block;
+}
+
+.ellipse-rectangle-only.hide {
+    display: none;
+}
+
+.line-only {
+    display: none;
+}
+
+.line-only.show {
+    display: block;
+}
+
+.line-only.show.control-row {
+    display: flex;
+}
+
+/* Border color is shown for both ellipse/rectangle AND line shapes */
+.ellipse-rectangle-only.line-only {
+    display: none; /* Hidden by default */
+}
+
+.ellipse-rectangle-only.line-only.show {
+    display: block; /* Show when line is selected */
+}
+
+.ellipse-rectangle-only:not(.hide):not(.line-only) {
+    display: block; /* Show when ellipse/rectangle is selected (and it's not a dual-class element) */
+}
+
+.v-separator-only {
+    display: none;
+}
+
+.v-separator-only.show {
+    display: block;
+}
+
+.h-separator-only {
+    display: none;
+}
+
+.h-separator-only.show {
+    display: block;
+}
+
+.h-separator-only.show.control-row {
+    display: flex;
+}
+
+/* Sidebar button styling */
+.sidebar-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 8px;
+    transition: background-color 0.2s;
+}
+
+.sidebar-content button:hover {
+    background-color: #0056b3;
+}
+
+.sidebar-content button:last-child {
+    margin-bottom: 0;
+}
+
+/* Drag and drop styling */
+.drop-zone {
+    height: 8px;
+    margin: 2px 0;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    opacity: 0;
+}
+
+.drop-zone.drag-over-valid {
+    background-color: #007acc;
+    opacity: 1;
+    height: 12px;
+    margin: 4px 0;
+}
+
+.shape-item {
+    cursor: grab;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.shape-item:active {
+    cursor: grabbing;
+}
+
+.shape-item[draggable="true"]:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shape-item[draggable="true"]:hover:not(.selected) {
+    background-color: rgba(0, 123, 255, 0.1);
+}

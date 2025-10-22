@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Siemens "Run My Screens" graphics simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="statusIndicator" class="status-indicator">Settings Auto-Saved ✓</div>
+    
+    <!-- Sidebar Overlay -->
+    <div id="sidebarOverlay" class="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <!-- Collapsible Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <div class="sidebar-content">
+            <h3>Canvas Settings</h3>
+            
+            <div class="control-group">
+                <label for="canvasWidth">Canvas Width:</label>
+                <input type="number" id="canvasWidth" value="600" min="100" max="1000" step="1">
+            </div>
+            
+            <div class="control-group">
+                <label for="canvasHeight">Canvas Height:</label>
+                <input type="number" id="canvasHeight" value="400" min="100" max="800" step="1">
+            </div>
+            
+            <div class="control-group">
+                <label for="backgroundColor">Background Color:</label>
+                <input type="color" id="backgroundColor" value="#ffffff">
+            </div>
+            
+            <h3>Canvas Actions</h3>
+            
+            <div class="control-group">
+                <button onclick="updateCanvas()">Refresh Canvas</button>
+                <button onclick="clearCanvas()">Clear Canvas</button>
+                <button onclick="downloadCanvas()">Download Canvas</button>
+            </div>
+            
+            <div class="control-group">
+                <button onclick="clearSavedState(); location.reload();" style="background-color: #dc3545; margin-top: 10px;">Reset All Settings</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Sidebar Toggle Tab -->
+    <div id="sidebarTab" class="sidebar-tab" onclick="toggleSidebar()">
+        <span>⚙️</span>
+    </div>
+    
+    <div class="main-layout" id="mainLayout">
+        <!-- Draggable Panel 1: Canvas -->
+        <div class="panel" id="canvasPanel" data-panel="canvas">
+            <div class="panel-header" draggable="true">
+                <span class="panel-title">Canvas</span>
+                <span class="drag-handle">⋮⋮</span>
+            </div>
+            <div class="panel-content">
+                <div class="canvas-container">
+                    <canvas id="myCanvas" width="600" height="400"></canvas>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Draggable Panel 2: Shape List -->
+        <div class="panel" id="shapeListPanel" data-panel="shapelist">
+            <div class="panel-header" draggable="true">
+                <span class="panel-title">Shape List</span>
+                <span class="drag-handle">⋮⋮</span>
+            </div>
+            <div class="panel-content">
+                <div class="shapes-list-container">
+                    <div class="control-group">
+                        <div id="shapesList" class="shapes-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Draggable Panel 3: Properties -->
+        <div class="panel" id="propertiesPanel" data-panel="properties">
+            <div class="panel-header" draggable="true">
+                <span class="panel-title">Properties</span>
+                <span class="drag-handle">⋮⋮</span>
+            </div>
+            <div class="panel-content">
+                <div class="controls-container">
+                    <div class="control-group">
+                        <button onclick="addShape()" style="background-color: #28a745; margin-bottom: 15px;">+ Add New Shape</button>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="shapeType">Shape Type:</label>
+                        <select id="shapeType">
+                            <option value="ellipse">Ellipse</option>
+                            <option value="rectangle">Rectangle</option>
+                            <option value="line">Line</option>
+                            <option value="v_separator">V Separator</option>
+                            <option value="h_separator">H Separator</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Universal Properties -->
+                    <div class="control-group ellipse-rectangle-only line-only">
+                        <label for="borderStyle">Border Style:</label>
+                        <select id="borderStyle">
+                            <option value="1">Solid</option>
+                            <option value="2">Dashed</option>
+                            <option value="3">Dotted</option>
+                            <option value="4">Dashed and Dotted</option>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group ellipse-rectangle-only line-only">
+                        <label for="borderColor">Border Color (f1):</label>
+                        <input type="color" id="borderColor" value="#000000">
+                    </div>
+                    
+                    <div class="control-group ellipse-rectangle-only">
+                        <label for="fillColor">Fill Color (f2):</label>
+                        <input type="color" id="fillColor" value="#ff0000">
+                    </div>
+                    
+                    <!-- Position Properties -->
+                    <div class="control-group control-row ellipse-rectangle-only">
+                        <div class="control-half">
+                            <label for="positionX" id="positionXLabel">X Position:</label>
+                            <input type="number" id="positionX" value="300" min="0" max="600" step="1">
+                        </div>
+                        <div class="control-half">
+                            <label for="positionY" id="positionYLabel">Y Position:</label>
+                            <input type="number" id="positionY" value="200" min="0" max="400" step="1">
+                        </div>
+                    </div>
+                    
+                    <!-- Ellipse and Rectangle properties (both use w, h) -->
+                    <div class="control-group control-row ellipse-rectangle-only">
+                        <div class="control-half">
+                            <label for="shapeWidth">Width (w):</label>
+                            <input type="number" id="shapeWidth" value="50" min="8" max="500" step="1">
+                        </div>
+                        <div class="control-half">
+                            <label for="shapeHeight">Height (h):</label>
+                            <input type="number" id="shapeHeight" value="50" min="8" max="500" step="1">
+                        </div>
+                    </div>
+                    
+                    <!-- Line properties -->
+                    <div class="control-group control-row line-only">
+                        <div class="control-half">
+                            <label for="lineX1">Start X:</label>
+                            <input type="number" id="lineX1" value="50" min="0" max="600" step="1">
+                        </div>
+                        <div class="control-half">
+                            <label for="lineY1">Start Y:</label>
+                            <input type="number" id="lineY1" value="50" min="0" max="400" step="1">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group control-row line-only">
+                        <div class="control-half">
+                            <label for="lineX2">End X:</label>
+                            <input type="number" id="lineX2" value="150" min="0" max="600" step="1">
+                        </div>
+                        <div class="control-half">
+                            <label for="lineY2">End Y:</label>
+                            <input type="number" id="lineY2" value="150" min="0" max="400" step="1">
+                        </div>
+                    </div>
+                    
+                    <!-- V_SEPARATOR properties -->
+                    <div class="control-group v-separator-only">
+                        <label for="vSepX">X Position:</label>
+                        <input type="number" id="vSepX" value="300" min="0" max="600" step="1">
+                    </div>
+                    
+                    <div class="control-group v-separator-only">
+                        <label for="vSepWidth">Line Weight (w):</label>
+                        <input type="number" id="vSepWidth" value="2" min="1" max="20" step="1">
+                    </div>
+                    
+                    <div class="control-group v-separator-only">
+                        <label for="vSepColor">Color:</label>
+                        <input type="color" id="vSepColor" value="#000000">
+                    </div>
+                    
+                    <div class="control-group v-separator-only">
+                        <label for="vSepPen">Pen Style:</label>
+                        <select id="vSepPen">
+                            <option value="1">Solid</option>
+                            <option value="2">Dashed</option>
+                            <option value="3">Dotted</option>
+                            <option value="4">Dashed and Dotted</option>
+                        </select>
+                    </div>
+                    
+                    <!-- H_SEPARATOR properties -->
+                    <div class="control-group control-row h-separator-only">
+                        <div class="control-half">
+                            <label for="hSepY">Y Position:</label>
+                            <input type="number" id="hSepY" value="200" min="0" max="400" step="1">
+                        </div>
+                        <div class="control-half">
+                            <label for="hSepHeight">Line Weight (h):</label>
+                            <input type="number" id="hSepHeight" value="2" min="1" max="20" step="1">
+                        </div>
+                    </div>
+                    
+                    <div class="control-group h-separator-only">
+                        <label for="hSepColor">Color:</label>
+                        <input type="color" id="hSepColor" value="#000000">
+                    </div>
+                    
+                    <div class="control-group h-separator-only">
+                        <label for="hSepPen">Pen Style:</label>
+                        <select id="hSepPen">
+                            <option value="1">Solid</option>
+                            <option value="2">Dashed</option>
+                            <option value="3">Dotted</option>
+                            <option value="4">Dashed and Dotted</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

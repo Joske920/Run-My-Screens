@@ -1792,6 +1792,7 @@ function updateShapesList() {
         const shapeItem = document.createElement('div');
         shapeItem.className = `shape-item ${shape.id === selectedShapeId ? 'selected' : ''}`;
         shapeItem.dataset.shapeId = shape.id;
+        shapeItem.dataset.shapeIndex = index;
         
         // Get formatted properties and preview colors
         const shapeProperties = formatShapeProperties(shape);
@@ -1815,12 +1816,40 @@ function updateShapesList() {
             <button class="delete-btn" onclick="deleteShape(${shape.id})" ${shapes.length <= 1 ? 'disabled' : ''}>×</button>
         `;
         
-        // Add drag functionality (only dragstart and dragend, no drop on items)
+        // Add drag functionality
         shapeItem.draggable = true;
         shapeItem.addEventListener('dragstart', handleShapeDragStart);
         shapeItem.addEventListener('dragend', handleShapeDragEnd);
         
+        // Add improved edge-based space-opening drag functionality
+        shapeItem.addEventListener('dragover', handleShapeItemDragOver);
+        shapeItem.addEventListener('dragleave', handleShapeItemDragLeave);
+        shapeItem.addEventListener('drop', handleShapeItemDrop);
+        
         container.appendChild(shapeItem);
+        
+        // Add margin detector above the shape item (to trigger the drop zone above it)
+        const topMarginDetector = document.createElement('div');
+        topMarginDetector.className = 'margin-detector top';
+        topMarginDetector.dataset.targetDropZoneIndex = index; // Points to drop zone above this item (accounting for top drop zone)
+        
+        // Add margin detector event listeners
+        topMarginDetector.addEventListener('dragover', handleMarginDetectorDragOver);
+        topMarginDetector.addEventListener('dragleave', handleMarginDetectorDragLeave);
+        
+        // Insert before the shape item
+        container.insertBefore(topMarginDetector, shapeItem);
+        
+        // Add margin detector below the shape item (to trigger the drop zone below it)
+        const bottomMarginDetector = document.createElement('div');
+        bottomMarginDetector.className = 'margin-detector bottom';
+        bottomMarginDetector.dataset.targetDropZoneIndex = index + 1; // Points to drop zone after this item
+        
+        // Add margin detector event listeners
+        bottomMarginDetector.addEventListener('dragover', handleMarginDetectorDragOver);
+        bottomMarginDetector.addEventListener('dragleave', handleMarginDetectorDragLeave);
+        
+        container.appendChild(bottomMarginDetector);
         
         // Add drop zone after each item (for dropping below it)
         const dropZone = document.createElement('div');
@@ -1997,24 +2026,163 @@ function handleShapeDragStart(e) {
     draggedShapeId = shapeId;
     
     e.target.style.opacity = '0.5';
+    e.target.setAttribute('dragging', 'true');
     e.dataTransfer.effectAllowed = 'move';
     e.dataTransfer.setData('text/html', e.target.outerHTML);
 }
 
 function handleShapeDragEnd(e) {
     e.target.style.opacity = '';
+    e.target.removeAttribute('dragging');
     draggedShapeId = null;
     
-    // Clear any remaining CSS classes
+    // Reset drag over state tracking
+    lastDragOverTarget = null;
+    lastDragOverState = null;
+    
+    // Clear any space-opening classes and drop zone indicators
+    document.querySelectorAll('.shape-item').forEach(item => {
+        item.classList.remove('drag-target-above', 'drag-target-below');
+    });
     document.querySelectorAll('.drop-zone').forEach(zone => {
         zone.classList.remove('drag-over-valid');
     });
 }
 
-// Drop zone event handlers
-function handleDropZoneDragOver(e) {
+// Improved edge-based space-opening drag handlers for shape items
+let lastDragOverTarget = null;
+let lastDragOverState = null;
+
+function handleShapeItemDragOver(e) {
+    // Check if we're actually over a drop zone - if so, let drop zone handle it
+    if (e.target.classList.contains('drop-zone')) {
+        return;
+    }
+    
     e.preventDefault();
     e.dataTransfer.dropEffect = 'move';
+    
+    if (!draggedShapeId || draggedShapeId == e.currentTarget.dataset.shapeId) {
+        return; // Don't allow dropping on self
+    }
+    
+    // Clear any drop zone indicators since we're over a shape item
+    document.querySelectorAll('.drop-zone').forEach(zone => {
+        zone.classList.remove('drag-over-valid');
+    });
+    
+    // Get precise mouse position within the item
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseY = e.clientY;
+    const itemTop = rect.top;
+    const itemBottom = rect.bottom;
+    const itemHeight = rect.height;
+    
+    // Define edge zones (top 25% and bottom 25% of the item)
+    const edgeZoneSize = itemHeight * 0.25;
+    const topEdgeLimit = itemTop + edgeZoneSize;
+    const bottomEdgeLimit = itemBottom - edgeZoneSize;
+    
+    let newState = null;
+    if (mouseY <= topEdgeLimit) {
+        newState = 'above';
+    } else if (mouseY >= bottomEdgeLimit) {
+        newState = 'below';
+    }
+    
+    // Only update if target or state has changed to prevent erratic movement
+    if (lastDragOverTarget !== e.currentTarget || lastDragOverState !== newState) {
+        // Clear all previous space-opening classes
+        document.querySelectorAll('.shape-item').forEach(item => {
+            item.classList.remove('drag-target-above', 'drag-target-below');
+        });
+        
+        // Apply new state if we're in an edge zone
+        if (newState === 'above') {
+            e.currentTarget.classList.add('drag-target-above');
+        } else if (newState === 'below') {
+            e.currentTarget.classList.add('drag-target-below');
+        }
+        
+        lastDragOverTarget = e.currentTarget;
+        lastDragOverState = newState;
+    }
+}
+
+function handleShapeItemDragLeave(e) {
+    // Only clear classes if we're actually leaving the item
+    if (!e.currentTarget.contains(e.relatedTarget)) {
+        e.currentTarget.classList.remove('drag-target-above', 'drag-target-below');
+        // Reset state tracking when leaving the item
+        if (lastDragOverTarget === e.currentTarget) {
+            lastDragOverTarget = null;
+            lastDragOverState = null;
+        }
+    }
+}
+
+function handleShapeItemDrop(e) {
+    e.preventDefault();
+    
+    if (!draggedShapeId || draggedShapeId == e.currentTarget.dataset.shapeId) {
+        return;
+    }
+    
+    const targetIndex = parseInt(e.currentTarget.dataset.shapeIndex);
+    const draggedIndex = shapes.findIndex(s => s.id === draggedShapeId);
+    
+    // Determine drop position based on edge zones
+    const rect = e.currentTarget.getBoundingClientRect();
+    const mouseY = e.clientY;
+    const itemTop = rect.top;
+    const itemBottom = rect.bottom;
+    const itemHeight = rect.height;
+    
+    const edgeZoneSize = itemHeight * 0.25;
+    const topEdgeLimit = itemTop + edgeZoneSize;
+    const bottomEdgeLimit = itemBottom - edgeZoneSize;
+    
+    let newIndex;
+    if (mouseY <= topEdgeLimit) {
+        // Drop above target
+        newIndex = targetIndex;
+    } else if (mouseY >= bottomEdgeLimit) {
+        // Drop below target
+        newIndex = targetIndex + 1;
+    } else {
+        // Middle zone - no drop allowed, return to original position
+        return;
+    }
+    
+    // Adjust index if dragging from before the target
+    if (draggedIndex < newIndex) {
+        newIndex--;
+    }
+    
+    // Move the shape in the array
+    const [draggedShape] = shapes.splice(draggedIndex, 1);
+    shapes.splice(newIndex, 0, draggedShape);
+    
+    // Update the canvas and shapes list
+    updateCanvas();
+    updateShapesList();
+    saveState();
+}
+
+// Drop zone event handlers (restored)
+function handleDropZoneDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling to shape items
+    e.dataTransfer.dropEffect = 'move';
+    
+    // Clear any item space-opening classes when over drop zones
+    document.querySelectorAll('.shape-item').forEach(item => {
+        item.classList.remove('drag-target-above', 'drag-target-below');
+    });
+    
+    // Reset state tracking to prevent interference
+    lastDragOverTarget = null;
+    lastDragOverState = null;
     
     // Clear previous classes
     e.currentTarget.classList.remove('drag-over-valid');
@@ -2024,11 +2192,13 @@ function handleDropZoneDragOver(e) {
 }
 
 function handleDropZoneDragLeave(e) {
+    e.stopPropagation(); // Prevent event bubbling
     e.currentTarget.classList.remove('drag-over-valid');
 }
 
 function handleDropZoneDrop(e) {
     e.preventDefault();
+    e.stopPropagation(); // Prevent event bubbling
     
     const insertAtStart = e.currentTarget.dataset.insertAtStart;
     const insertAfterShapeId = e.currentTarget.dataset.insertAfterShapeId;
@@ -2052,8 +2222,6 @@ function handleDropZoneDrop(e) {
             return;
         }
         
-        console.log('Before move - Dragged index:', draggedIndex, 'Target index:', targetIndex);
-        
         // If we're moving the item to a position after its current position,
         // we need to adjust for the fact that we'll remove it first
         if (targetIndex > draggedIndex) {
@@ -2063,28 +2231,63 @@ function handleDropZoneDrop(e) {
         // Remove dragged shape from its current position
         const [draggedShape] = shapes.splice(draggedIndex, 1);
         
-        console.log('After removal - Adjusted target index:', targetIndex);
-        
         // Insert the shape at the new position
         shapes.splice(targetIndex, 0, draggedShape);
         
-        console.log('Reordered shapes - New position:', targetIndex);
-        console.log('About to update canvas and shapes list...');
-        
         // Update the canvas and shape list
         updateCanvas();
-        
-        // Use setTimeout to ensure the shapes list updates after any DOM processing
-        setTimeout(() => {
-            updateShapesList();
-            console.log('Delayed updateShapesList completed');
-        }, 0);
-        
+        updateShapesList();
         saveState();
     }
     
     // Reset visual feedback
     e.currentTarget.classList.remove('drag-over-valid');
+}
+
+// Margin detector event handlers - trigger drop zones when hovering over margins
+function handleMarginDetectorDragOver(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!draggedShapeId) return;
+    
+    // Clear any shape item space-opening classes
+    document.querySelectorAll('.shape-item').forEach(item => {
+        item.classList.remove('drag-target-above', 'drag-target-below');
+    });
+    
+    // Reset state tracking to prevent interference
+    lastDragOverTarget = null;
+    lastDragOverState = null;
+    
+    // Find and activate the corresponding drop zone
+    const targetDropZoneIndex = parseInt(e.currentTarget.dataset.targetDropZoneIndex);
+    const allDropZones = document.querySelectorAll('.drop-zone');
+    
+    // Clear all drop zones first
+    allDropZones.forEach(zone => {
+        zone.classList.remove('drag-over-valid');
+    });
+    
+    // Activate the target drop zone
+    if (allDropZones[targetDropZoneIndex]) {
+        allDropZones[targetDropZoneIndex].classList.add('drag-over-valid');
+    }
+}
+
+function handleMarginDetectorDragLeave(e) {
+    e.stopPropagation();
+    
+    // Don't clear if we're moving to a related element (like the corresponding drop zone)
+    if (!e.relatedTarget || 
+        (!e.relatedTarget.classList.contains('drop-zone') && 
+         !e.relatedTarget.classList.contains('margin-detector'))) {
+        
+        // Clear all drop zones
+        document.querySelectorAll('.drop-zone').forEach(zone => {
+            zone.classList.remove('drag-over-valid');
+        });
+    }
 }
 
 // Panel Drag and Drop System
@@ -2108,7 +2311,7 @@ function initializePanelDragDrop() {
             
             // Create drag image of the entire panel (optional)
             const dragImage = panel.cloneNode(true);
-            dragImage.style.transform = 'rotate(2deg)';
+            dragImage.style.transform = 'rotate(1deg)';
             dragImage.style.opacity = '0.8';
             // Calculate offset relative to the panel, not just the header
             const headerRect = header.getBoundingClientRect();

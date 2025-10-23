@@ -193,6 +193,7 @@ body {
     align-items: center;
     cursor: grab;
     user-select: none;
+    position: relative;
 }
 
 .panel-header:active {
@@ -205,6 +206,7 @@ body {
     font-size: 14px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    pointer-events: none; /* Allow drag events to pass through */
 }
 
 .drag-handle {
@@ -214,6 +216,7 @@ body {
     transform: rotate(90deg);
     opacity: 0.6;
     transition: opacity 0.2s;
+    pointer-events: none; /* Allow drag events to pass through */
 }
 
 .panel-header:hover .drag-handle {
@@ -395,7 +398,7 @@ h1 {
 
 .status-indicator {
     position: fixed;
-    top: 20px;
+    bottom: 20px;
     right: 20px;
     background-color: #28a745;
     color: white;
@@ -406,10 +409,12 @@ h1 {
     opacity: 0;
     transition: opacity 0.3s ease;
     z-index: 1000;
+    pointer-events: none; /* Allow clicks to pass through when not visible */
 }
 
 .status-indicator.show {
     opacity: 1;
+    pointer-events: auto; /* Allow interactions when visible */
 }
 
 h3 {
@@ -432,13 +437,13 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 8px 12px;
-    margin-bottom: 4px;
+    padding: 6px 10px;
+    margin-bottom: 2px;
     border: 1px solid #ddd;
     border-radius: 4px;
     background-color: #f9f9f9;
     cursor: pointer;
-    transition: background-color 0.2s;
+    transition: background-color 0.2s, margin 0.2s ease, transform 0.2s ease;
 }
 
 .shape-item:hover {
@@ -585,34 +590,69 @@ h3 {
 
 /* Drag and drop styling */
 .drop-zone {
-    height: 8px;
-    margin: 2px 0;
-    border-radius: 4px;
+    height: 2px;
+    width: 100%;
+    margin: 0px 0;
+    border-radius: 0px;
     transition: all 0.2s ease;
     opacity: 0;
+    background-color: #007acc;
+    position: relative;
+    z-index: 10;
+    pointer-events: all;
 }
 
 .drop-zone.drag-over-valid {
-    background-color: #007acc;
     opacity: 1;
-    height: 12px;
+    height: 6px;
     margin: 4px 0;
+}
+
+/* Margin detectors - invisible areas that detect hover over margins */
+.margin-detector {
+    height: 6px; /* Slightly larger than the 2px margin for easier detection */
+    width: 100%;
+    position: relative;
+    z-index: 15; /* Higher than drop zones */
+    pointer-events: all;
+    background: transparent;
+    margin: -3px 0; /* Negative margin to overlay the gap area */
+}
+
+.margin-detector.top {
+    margin-top: -4px;
+    margin-bottom: -2px;
+}
+
+.margin-detector.bottom {
+    margin-top: -2px;
+    margin-bottom: -4px;
+}
+
+/* Space-opening animation for drag targets - smoother transitions */
+.shape-item.drag-target-above {
+    margin-top: 8px;
+}
+
+.shape-item.drag-target-below {
+    margin-bottom: 8px;
 }
 
 .shape-item {
     cursor: grab;
-    transition: opacity 0.2s ease, transform 0.2s ease;
+    transition: margin 0.2s ease-out, transform 0.15s ease-out;
+    will-change: margin, transform;
 }
 
 .shape-item:active {
     cursor: grabbing;
 }
 
-.shape-item[draggable="true"]:hover {
+.shape-item[draggable="true"]:hover:not([dragging]) {
     transform: translateY(-1px);
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-.shape-item[draggable="true"]:hover:not(.selected) {
+.shape-item[draggable="true"]:hover:not(.selected):not([dragging]) {
     background-color: rgba(0, 123, 255, 0.1);
 }

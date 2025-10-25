@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Siemens "Run My Screens" graphics simulator</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="CSS/styles.css">
 </head>
 <body>
     <div id="statusIndicator" class="status-indicator">Settings Auto-Saved ✓</div>
@@ -228,6 +228,24 @@
         </div>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Load JavaScript modules in dependency order -->
+    <!-- Core modules first -->
+    <script src="JS/constants.js"></script>
+    <script src="JS/appState.js"></script>
+    
+    <!-- Utility functions -->
+    <script src="JS/utils.js"></script>
+    <script src="JS/shapes.js"></script>
+    
+    <!-- Feature modules -->
+    <script src="JS/canvasDrawing.js"></script>
+    <script src="JS/shapeOperations.js"></script>
+    <script src="JS/storage.js"></script>
+    <script src="JS/uiControls.js"></script>
+    <script src="JS/dragDrop.js"></script>
+    <script src="JS/eventHandlers.js"></script>
+    
+    <!-- Main initialization (must be last) -->
+    <script src="JS/main.js"></script>
 </body>
 </html>

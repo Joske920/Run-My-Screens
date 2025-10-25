@@ -1,6 +1,6 @@
 body {
     margin: 0;
-    padding: 20px;
+    padding: 15px;
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     box-sizing: border-box;
@@ -52,11 +52,11 @@ body {
 
 .sidebar-tab {
     position: fixed;
-    top: 50%;
+    top: 15%;
     left: 0;
     transform: translateY(-50%);
-    width: 40px;
-    height: 60px;
+    width: 35px;
+    height: 50px;
     background: #007bff;
     color: white;
     display: flex;
@@ -141,7 +141,7 @@ body {
 
 .panel.dragging {
     opacity: 0.7;
-    transform: rotate(2deg) scale(0.98);
+    transform: rotate(1deg) scale(0.98);
     z-index: 1000;
     border: 2px dashed #007acc;
 }
@@ -236,7 +236,7 @@ body {
 .canvas-container {
     background: transparent;
     border-radius: 0;
-    padding: 20px;
+    padding: 15px;
     box-shadow: none;
     display: flex;
     justify-content: center;
@@ -248,7 +248,7 @@ body {
 .shapes-list-container {
     background: transparent;
     border-radius: 0;
-    padding: 20px;
+    padding: 15px;
     box-shadow: none;
     overflow: hidden;
     height: 100%;
@@ -261,7 +261,7 @@ body {
     width: 100%;
     background: transparent;
     border-radius: 0;
-    padding: 20px;
+    padding: 15px;
     box-shadow: none;
     height: 100%;
     overflow-y: auto;
@@ -271,8 +271,9 @@ body {
 
 /* Panel sizing */
 .panel[data-panel="canvas"] {
-    flex: 2;
-    min-width: 400px;
+    /*flex: 2;*/
+    min-width: 600px + 80px;
+    max-width: calc(var(--widthElement) + 80px);
 }
 
 .panel[data-panel="shapelist"] {
@@ -283,6 +284,7 @@ body {
 .panel[data-panel="properties"] {
     flex: 0.67;
     min-width: 200px;
+    max-width: 300px;
 }
 
 canvas {

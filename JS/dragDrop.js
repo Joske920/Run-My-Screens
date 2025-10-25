@@ -474,6 +474,9 @@ function handleShapeItemDrop(e) {
         newIndex--;
     }
     
+    // Save state for undo before reordering
+    saveStateToUndo();
+    
     // Move the shape in the array
     const [draggedShape] = shapes.splice(draggedIndex, 1);
     shapes.splice(newIndex, 0, draggedShape);
@@ -542,6 +545,9 @@ function handleDropZoneDrop(e) {
         if (targetIndex > draggedIndex) {
             targetIndex = targetIndex - 1;
         }
+        
+        // Save state for undo before reordering
+        saveStateToUndo();
         
         // Remove dragged shape from its current position
         const [draggedShape] = shapes.splice(draggedIndex, 1);

@@ -59,6 +59,10 @@
                 <span class="drag-handle">⋮⋮</span>
             </div>
             <div class="panel-content">
+                <div class="canvas-toolbar">
+                    <button id="undoBtn" onclick="undo()" title="Undo (Ctrl+Z)" disabled>↶ Undo</button>
+                    <button id="redoBtn" onclick="redo()" title="Redo (Ctrl+Y)" disabled>↷ Redo</button>
+                </div>
                 <div class="canvas-container">
                     <canvas id="myCanvas" width="600" height="400"></canvas>
                 </div>
@@ -241,6 +245,7 @@
     <script src="JS/shapeOperations.js"></script>
     <script src="JS/storage.js"></script>
     <script src="JS/uiControls.js"></script>
+    <script src="JS/undoRedo.js"></script>
     <script src="JS/dragDrop.js"></script>
     <script src="JS/eventHandlers.js"></script>
     

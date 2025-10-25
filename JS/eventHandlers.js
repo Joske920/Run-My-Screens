@@ -21,6 +21,7 @@ function setupEventListeners() {
                 
                 // Convert between shape types while preserving position
                 if (oldType !== shape.type) {
+                    saveStateToUndo(); // Save state before type conversion
                     if (shape.type === 'line') {
                         // Convert to line format
                         shape.x1 = shape.x || 50;
@@ -60,6 +61,7 @@ function setupEventListeners() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
+                saveStateToUndo(); // Save state before changing style
                 shape.s = this.value; // Border style
                 updateCanvas();
                 saveState();

@@ -233,6 +233,36 @@ body {
 }
 
 /* Adjust existing containers to fit within panels */
+.canvas-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 10px 15px 0 15px;
+    background: transparent;
+}
+
+.canvas-toolbar button {
+    width: auto;
+    padding: 6px 12px;
+    margin: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.canvas-toolbar button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.canvas-toolbar button:not(:disabled):hover {
+    background-color: #0056b3;
+}
+
 .canvas-container {
     background: transparent;
     border-radius: 0;
@@ -439,7 +469,7 @@ h3 {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 6px 10px;
+    padding: 0px 10px;
     margin-bottom: 2px;
     border: 1px solid #ddd;
     border-radius: 4px;

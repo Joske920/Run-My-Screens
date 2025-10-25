@@ -39,6 +39,9 @@ function getShapesByZOrderReverse() {
 
 // Shape management functions
 function addShape() {
+    // Save state for undo before making changes
+    saveStateToUndo();
+    
     // Check if there's a selected shape to copy
     if (selectedShapeId !== null) {
         // Copy the selected shape with position offset
@@ -190,6 +193,9 @@ function copyShape() {
 }
 
 function deleteShape(id) {
+    // Save state for undo before making changes
+    saveStateToUndo();
+    
     const index = shapes.findIndex(shape => shape.id === id);
     if (index !== -1) {
         shapes.splice(index, 1);

@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Add event listeners for real-time updates
     setupEventListeners();
     
+    // Initialize undo/redo system
+    initializeUndoSystem();
+    
     // Initialize panel drag and drop system
     loadPanelOrder();
     initializePanelDragDrop();

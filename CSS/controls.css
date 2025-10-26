@@ -1,0 +1,237 @@
+/* Controls and Forms */
+.shapes-list-container {
+    background: transparent;
+    border-radius: 0;
+    padding: 15px;
+    box-shadow: none;
+    overflow: hidden;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.controls-container {
+    width: 100%;
+    background: transparent;
+    border-radius: 0;
+    padding: 15px;
+    box-shadow: none;
+    height: 100%;
+    overflow-y: auto;
+    box-sizing: border-box;
+    flex: 1;
+}
+
+.control-group {
+    margin-bottom: 20px;
+}
+
+/* Special control group for shapes list - uses full height */
+.shapes-list-container .control-group {
+    margin-bottom: 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.shapes-list-container .control-group label {
+    flex-shrink: 0;
+    margin-bottom: 10px;
+}
+
+.control-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+}
+
+.control-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.control-group input[type="color"] {
+    height: 40px;
+    padding: 2px;
+}
+
+.control-group input[type="range"] {
+    margin-bottom: 5px;
+}
+
+.control-group select {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* Side-by-side control layout */
+.control-row {
+    display: flex;
+    gap: 10px;
+}
+
+.control-half {
+    flex: 1;
+}
+
+.control-half label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.control-half input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.range-value {
+    text-align: center;
+    font-size: 12px;
+    color: #666;
+}
+
+button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.status-indicator {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: bold;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1000;
+    pointer-events: none; /* Allow clicks to pass through when not visible */
+}
+
+.status-indicator.show {
+    opacity: 1;
+    pointer-events: auto; /* Allow interactions when visible */
+}
+
+h3 {
+    color: #333;
+    margin-bottom: 15px;
+    border-bottom: 2px solid #007bff;
+    padding-bottom: 5px;
+}
+
+/* Shapes List Styles */
+.shapes-list {
+    flex: 1;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #f8f9fa;
+    min-height: 200px;
+}
+
+.shape-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0px 10px;
+    margin-bottom: 2px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+    cursor: pointer;
+    transition: background-color 0.2s, margin 0.2s ease-out, transform 0.15s ease-out;
+}
+
+.shape-item:hover {
+    background-color: #e9ecef;
+}
+
+.shape-item.selected {
+    background-color: #007bff;
+    color: white;
+}
+
+.shape-item.selected:hover {
+    background-color: #0056b3; /* Darker blue on hover */
+    color: white; /* Ensure white text remains */
+}
+
+.shape-info {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.shape-preview {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    border: 1px solid #666;
+    display: inline-block;
+}
+
+.shape-preview.dual-color {
+    border-width: 2px;
+    /* Remove default border since we're using the colored border */
+    border-color: transparent;
+}
+
+.shape-details {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.delete-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    font-size: 16px;
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.delete-btn:hover:not(:disabled) {
+    background: #c82333;
+}

@@ -1,0 +1,81 @@
+/* Drag and Drop Styling */
+.drop-zone {
+    height: 2px;
+    width: 100%;
+    margin: 0px 0;
+    border-radius: 0px;
+    transition: all 0.2s ease;
+    opacity: 0;
+    background-color: #007acc;
+    position: relative;
+    z-index: 10;
+    pointer-events: all;
+}
+
+.drop-zone.drag-over-valid {
+    opacity: 1;
+    height: 6px;
+    margin: 4px 0;
+}
+
+/* Margin detectors - invisible areas that detect hover over margins */
+.margin-detector {
+    height: 6px; /* Slightly larger than the 2px margin for easier detection */
+    width: 100%;
+    position: relative;
+    z-index: 15; /* Higher than drop zones */
+    pointer-events: all;
+    background: transparent;
+    margin: -3px 0; /* Negative margin to overlay the gap area */
+}
+
+.margin-detector.top {
+    margin-top: -4px;
+    margin-bottom: -2px;
+}
+
+.margin-detector.bottom {
+    margin-top: -2px;
+    margin-bottom: -4px;
+}
+
+/* Space-opening animation for drag targets - smoother transitions */
+.shape-item.drag-target-above {
+    margin-top: 8px;
+}
+
+.shape-item.drag-target-below {
+    margin-bottom: 8px;
+}
+
+/* Additional drag-specific shape-item properties */
+.shape-item[draggable="true"] {
+    cursor: grab;
+    will-change: margin, transform;
+}
+
+.shape-item:active {
+    cursor: grabbing;
+}
+
+.shape-item[draggable="true"]:hover:not([dragging]) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shape-item[draggable="true"]:hover:not(.selected):not([dragging]) {
+    background-color: rgba(0, 123, 255, 0.1);
+}
+
+.shape-item:active {
+    cursor: grabbing;
+}
+
+.shape-item[draggable="true"]:hover:not([dragging]) {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.shape-item[draggable="true"]:hover:not(.selected):not([dragging]) {
+    background-color: rgba(0, 123, 255, 0.1);
+}

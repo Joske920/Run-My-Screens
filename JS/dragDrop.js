@@ -21,6 +21,7 @@ function handleMouseDown(e) {
             // Check if clicking on a resize handle of the selected shape
             const handle = getResizeHandle(mouseX, mouseY, selectedShape);
             if (handle) {
+                saveStateToUndo(); // Save state before resizing shape
                 isResizing = true;
                 resizeHandle = handle;
                 draggedShapeId = selectedShape.id;
@@ -30,6 +31,7 @@ function handleMouseDown(e) {
             
             // Check if clicking in the center of the selected shape (for moving)
             if (isPointInShapeCenter(mouseX, mouseY, selectedShape)) {
+                saveStateToUndo(); // Save state before moving shape
                 isDragging = true;
                 draggedShapeId = selectedShape.id;
                 

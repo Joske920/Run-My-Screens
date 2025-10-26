@@ -73,6 +73,7 @@ function setupEventListeners() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
+                saveStateToUndo(); // Save state before color change
                 if (shape.type === 'line') {
                     shape.f = this.value; // Line color
                 } else {
@@ -88,6 +89,7 @@ function setupEventListeners() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
+                saveStateToUndo(); // Save state before color change
                 shape.f2 = this.value; // Fill color
                 updateCanvas();
                 saveState();
@@ -213,6 +215,7 @@ function setupEventListeners() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape && shape.type === 'v_separator') {
+                saveStateToUndo(); // Save state before color change
                 shape.color = this.value;
                 updateCanvas();
                 saveState();
@@ -258,6 +261,7 @@ function setupEventListeners() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape && shape.type === 'h_separator') {
+                saveStateToUndo(); // Save state before color change
                 shape.color = this.value;
                 updateCanvas();
                 saveState();
@@ -278,6 +282,7 @@ function setupEventListeners() {
     
     // Background color control
     addEventListenerSafe('backgroundColor', 'input', function() {
+        saveStateToUndo(); // Save state before background color change
         updateCanvas();
         saveState();
     });

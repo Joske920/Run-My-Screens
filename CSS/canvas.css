@@ -1,0 +1,51 @@
+/* Canvas and Toolbar Styles */
+.canvas-toolbar {
+    display: flex;
+    gap: 8px;
+    padding: 10px 15px 0 15px;
+    background: transparent;
+}
+
+.canvas-toolbar button {
+    width: auto;
+    padding: 6px 12px;
+    margin: 0;
+    font-size: 14px;
+    border-radius: 4px;
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+}
+
+.canvas-toolbar button:disabled {
+    background-color: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.canvas-toolbar button:not(:disabled):hover {
+    background-color: #0056b3;
+}
+
+.canvas-container {
+    background: transparent;
+    border-radius: 0;
+    padding: 15px;
+    box-shadow: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    flex: 1;
+}
+
+canvas {
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    display: block;
+    margin: 0 auto;
+    cursor: default;
+    user-select: none;
+}

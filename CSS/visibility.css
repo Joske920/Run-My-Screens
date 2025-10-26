@@ -1,0 +1,53 @@
+/* Conditional Property Visibility */
+.ellipse-rectangle-only {
+    display: block;
+}
+
+.ellipse-rectangle-only.hide {
+    display: none;
+}
+
+.line-only {
+    display: none;
+}
+
+.line-only.show {
+    display: block;
+}
+
+.line-only.show.control-row {
+    display: flex;
+}
+
+/* Border color is shown for both ellipse/rectangle AND line shapes */
+.ellipse-rectangle-only.line-only {
+    display: none; /* Hidden by default */
+}
+
+.ellipse-rectangle-only.line-only.show {
+    display: block; /* Show when line is selected */
+}
+
+.ellipse-rectangle-only:not(.hide):not(.line-only) {
+    display: block; /* Show when ellipse/rectangle is selected (and it's not a dual-class element) */
+}
+
+.v-separator-only {
+    display: none;
+}
+
+.v-separator-only.show {
+    display: block;
+}
+
+.h-separator-only {
+    display: none;
+}
+
+.h-separator-only.show {
+    display: block;
+}
+
+.h-separator-only.show.control-row {
+    display: flex;
+}

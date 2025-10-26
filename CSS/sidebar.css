@@ -1,0 +1,92 @@
+/* Sidebar Styles */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -280px;
+    width: 280px;
+    height: 100vh;
+    background: white;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+
+.sidebar.open {
+    left: 0;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.3);
+}
+
+/* Optional: Add overlay effect when sidebar is open */
+.sidebar-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.1);
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.sidebar-content {
+    padding: 80px 20px 20px 20px;
+}
+
+.sidebar-tab {
+    position: fixed;
+    top: 15%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 35px;
+    height: 50px;
+    background: #007bff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+    transition: left 0.3s ease;
+    z-index: 1001;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+}
+
+.sidebar-tab:hover {
+    background: #0056b3;
+}
+
+.sidebar.open + .sidebar-tab {
+    left: 280px;
+}
+
+.sidebar-tab span {
+    font-size: 18px;
+}
+
+/* Sidebar button styling */
+.sidebar-content .control-group {
+    margin-bottom: 15px;
+}
+
+.sidebar-content button {
+    width: 100%;
+    padding: 8px;
+    background: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+.sidebar-content button:hover {
+    background: #0056b3;
+}

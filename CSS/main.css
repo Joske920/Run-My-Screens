@@ -1,0 +1,22 @@
+/* Main CSS File - Imports all modular CSS files */
+
+/* Base styles and global layout */
+@import url('base.css');
+
+/* Sidebar navigation */
+@import url('sidebar.css');
+
+/* Draggable panel system */
+@import url('panels.css');
+
+/* Canvas and toolbar */
+@import url('canvas.css');
+
+/* Controls and form elements */
+@import url('controls.css');
+
+/* Drag and drop interactions */
+@import url('dragDrop.css');
+
+/* Conditional property visibility */
+@import url('visibility.css');

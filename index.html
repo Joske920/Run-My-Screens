@@ -128,7 +128,7 @@
                         <input type="color" id="fillColor" value="#ff0000">
                     </div>
                     
-                    <!-- Position Properties -->
+                    <!-- Position and size properties -->
                     <div class="control-group control-row ellipse-rectangle-only">
                         <div class="control-half">
                             <label for="positionX" id="positionXLabel">X Position:</label>
@@ -152,6 +152,18 @@
                         </div>
                     </div>
                     
+                    <!-- Ellipse/Rectangle tag property -->
+                    <div class="control-group ellipse-rectangle-only">
+                        <label for="shapeTag">Tag:</label>
+                        <input type="text" id="shapeTag" value="" placeholder="Enter tag...">
+                    </div>
+                    
+                    <!-- Ellipse/Rectangle visibility property -->
+                    <div class="control-group ellipse-rectangle-only">
+                        <label for="shapeVisible">Visible:</label>
+                        <button type="button" id="shapeVisible" class="toggle-button" data-value="true">TRUE</button>
+                    </div>
+                    
                     <!-- Line properties -->
                     <div class="control-group control-row line-only">
                         <div class="control-half">
@@ -173,6 +185,18 @@
                             <label for="lineY2">End Y:</label>
                             <input type="number" id="lineY2" value="150" min="0" max="400" step="1">
                         </div>
+                    </div>
+                    
+                    <!-- Line tag property -->
+                    <div class="control-group line-only">
+                        <label for="lineTag">Tag:</label>
+                        <input type="text" id="lineTag" value="" placeholder="Enter tag...">
+                    </div>
+                    
+                    <!-- Line visibility property -->
+                    <div class="control-group line-only">
+                        <label for="lineVisible">Visible:</label>
+                        <button type="button" id="lineVisible" class="toggle-button" data-value="true">TRUE</button>
                     </div>
                     
                     <!-- V_SEPARATOR properties -->
@@ -201,6 +225,18 @@
                         </select>
                     </div>
                     
+                    <!-- V_SEPARATOR tag property -->
+                    <div class="control-group v-separator-only">
+                        <label for="vSepTag">Tag:</label>
+                        <input type="text" id="vSepTag" value="" placeholder="Enter tag...">
+                    </div>
+                    
+                    <!-- V_SEPARATOR visibility property -->
+                    <div class="control-group v-separator-only">
+                        <label for="vSepVisible">Visible:</label>
+                        <button type="button" id="vSepVisible" class="toggle-button" data-value="true">TRUE</button>
+                    </div>
+                    
                     <!-- H_SEPARATOR properties -->
                     <div class="control-group control-row h-separator-only">
                         <div class="control-half">
@@ -226,6 +262,18 @@
                             <option value="3">Dotted</option>
                             <option value="4">Dashed and Dotted</option>
                         </select>
+                    </div>
+                    
+                    <!-- H_SEPARATOR tag property -->
+                    <div class="control-group h-separator-only">
+                        <label for="hSepTag">Tag:</label>
+                        <input type="text" id="hSepTag" value="" placeholder="Enter tag...">
+                    </div>
+                    
+                    <!-- H_SEPARATOR visibility property -->
+                    <div class="control-group h-separator-only">
+                        <label for="hSepVisible">Visible:</label>
+                        <button type="button" id="hSepVisible" class="toggle-button" data-value="true">TRUE</button>
                     </div>
                 </div>
             </div>

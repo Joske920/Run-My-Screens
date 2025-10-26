@@ -29,6 +29,9 @@ function setupEventListeners() {
                         shape.x2 = (shape.x || 50) + (shape.w || 100);
                         shape.y2 = (shape.y || 50) + (shape.h || 100);
                         shape.f = shape.f1 || '#000000';
+                        // Add default line-specific properties if not present
+                        if (shape.tag === undefined) shape.tag = '';
+                        if (shape.visible === undefined) shape.visible = true;
                         // Remove old properties
                         delete shape.x; delete shape.y; delete shape.w; delete shape.h; delete shape.f1; delete shape.f2;
                     } else if (oldType === 'line') {
@@ -41,8 +44,16 @@ function setupEventListeners() {
                             shape.f1 = shape.f || '#000000';
                             shape.f2 = '#ff0000';
                         }
+                        // Preserve tag and visible properties when converting from line
+                        const preservedTag = shape.tag;
+                        const preservedVisible = shape.visible;
+                        
                         // Remove line properties
                         delete shape.x1; delete shape.y1; delete shape.x2; delete shape.y2; delete shape.f;
+                        
+                        // Restore preserved properties
+                        if (preservedTag !== undefined) shape.tag = preservedTag;
+                        if (preservedVisible !== undefined) shape.visible = preservedVisible;
                     }
                 }
                 
@@ -188,6 +199,78 @@ function setupEventListeners() {
         }
     });
     
+    // Line tag property
+    addEventListenerSafe('lineTag', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'line') {
+                saveStateToUndo(); // Save state before tag change
+                shape.tag = this.value;
+                updateShapesList(); // Update the shapes list to show new tag
+                saveState();
+            }
+        }
+    });
+    
+    // Line visibility toggle
+    addEventListenerSafe('lineVisible', 'click', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'line') {
+                saveStateToUndo(); // Save state before visibility change
+                const currentValue = this.getAttribute('data-value') === 'true';
+                const newValue = !currentValue;
+                
+                // Update shape property
+                shape.visible = newValue;
+                
+                // Update button appearance
+                this.setAttribute('data-value', newValue.toString());
+                this.textContent = newValue ? 'TRUE' : 'FALSE';
+                
+                updateCanvas(); // Redraw canvas with visibility changes
+                updateShapesList(); // Update the shapes list to show visibility
+                saveState();
+            }
+        }
+    });
+    
+    // Ellipse/Rectangle tag property
+    addEventListenerSafe('shapeTag', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && (shape.type === 'ellipse' || shape.type === 'rectangle')) {
+                saveStateToUndo(); // Save state before tag change
+                shape.tag = this.value;
+                updateShapesList(); // Update the shapes list to show new tag
+                saveState();
+            }
+        }
+    });
+    
+    // Ellipse/Rectangle visibility toggle
+    addEventListenerSafe('shapeVisible', 'click', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && (shape.type === 'ellipse' || shape.type === 'rectangle')) {
+                saveStateToUndo(); // Save state before visibility change
+                const currentValue = this.getAttribute('data-value') === 'true';
+                const newValue = !currentValue;
+                
+                // Update shape property
+                shape.visible = newValue;
+                
+                // Update button appearance
+                this.setAttribute('data-value', newValue.toString());
+                this.textContent = newValue ? 'TRUE' : 'FALSE';
+                
+                updateCanvas(); // Redraw canvas with visibility changes
+                updateShapesList(); // Update the shapes list to show visibility
+                saveState();
+            }
+        }
+    });
+
     // V_SEPARATOR coordinate and style properties
     addEventListenerSafe('vSepX', 'input', function() {
         if (selectedShapeId !== null) {
@@ -234,6 +317,42 @@ function setupEventListeners() {
         }
     });
     
+    // V_SEPARATOR tag property
+    addEventListenerSafe('vSepTag', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'v_separator') {
+                saveStateToUndo(); // Save state before tag change
+                shape.tag = this.value;
+                updateShapesList(); // Update the shapes list to show new tag
+                saveState();
+            }
+        }
+    });
+    
+    // V_SEPARATOR visibility toggle
+    addEventListenerSafe('vSepVisible', 'click', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'v_separator') {
+                saveStateToUndo(); // Save state before visibility change
+                const currentValue = this.getAttribute('data-value') === 'true';
+                const newValue = !currentValue;
+                
+                // Update shape property
+                shape.visible = newValue;
+                
+                // Update button appearance
+                this.setAttribute('data-value', newValue.toString());
+                this.textContent = newValue ? 'TRUE' : 'FALSE';
+                
+                updateCanvas(); // Redraw canvas with visibility changes
+                updateShapesList(); // Update the shapes list to show visibility
+                saveState();
+            }
+        }
+    });
+    
     // H_SEPARATOR coordinate and style properties
     addEventListenerSafe('hSepY', 'input', function() {
         if (selectedShapeId !== null) {
@@ -275,6 +394,42 @@ function setupEventListeners() {
             if (shape && shape.type === 'h_separator') {
                 shape.pen = this.value;
                 updateCanvas();
+                saveState();
+            }
+        }
+    });
+    
+    // H_SEPARATOR tag property
+    addEventListenerSafe('hSepTag', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'h_separator') {
+                saveStateToUndo(); // Save state before tag change
+                shape.tag = this.value;
+                updateShapesList(); // Update the shapes list to show new tag
+                saveState();
+            }
+        }
+    });
+    
+    // H_SEPARATOR visibility toggle
+    addEventListenerSafe('hSepVisible', 'click', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'h_separator') {
+                saveStateToUndo(); // Save state before visibility change
+                const currentValue = this.getAttribute('data-value') === 'true';
+                const newValue = !currentValue;
+                
+                // Update shape property
+                shape.visible = newValue;
+                
+                // Update button appearance
+                this.setAttribute('data-value', newValue.toString());
+                this.textContent = newValue ? 'TRUE' : 'FALSE';
+                
+                updateCanvas(); // Redraw canvas with visibility changes
+                updateShapesList(); // Update the shapes list to show visibility
                 saveState();
             }
         }

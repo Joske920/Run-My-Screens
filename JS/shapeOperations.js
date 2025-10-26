@@ -67,6 +67,13 @@ function addShape() {
         newShape.y = parseInt(document.getElementById('positionY').value) || 50;   // y-coordinate (top-left)
         newShape.w = parseInt(document.getElementById('shapeWidth').value) || 100; // width
         newShape.h = parseInt(document.getElementById('shapeHeight').value) || 100; // height
+        
+        // New ellipse/rectangle properties
+        const shapeTag = document.getElementById('shapeTag');
+        const shapeVisible = document.getElementById('shapeVisible');
+        
+        newShape.tag = shapeTag?.value || '';                                      // tag string
+        newShape.visible = shapeVisible?.getAttribute('data-value') === 'true';    // visibility boolean
     } else if (shapeType === 'line') {
         // Line uses x1, y1, x2, y2, f, s format - read from properties panel
         newShape.x1 = parseInt(document.getElementById('lineX1').value) || 50;   // start x-coordinate
@@ -75,6 +82,13 @@ function addShape() {
         newShape.y2 = parseInt(document.getElementById('lineY2').value) || 150;  // end y-coordinate
         newShape.f = document.getElementById('borderColor').value || '#000000';   // line color
         newShape.s = document.getElementById('borderStyle').value || '1';         // border style
+        
+        // New line properties
+        const lineTag = document.getElementById('lineTag');
+        const lineVisible = document.getElementById('lineVisible');
+        
+        newShape.tag = lineTag?.value || '';                                      // tag string
+        newShape.visible = lineVisible?.getAttribute('data-value') === 'true';    // visibility boolean
     } else if (shapeType === 'v_separator') {
         // V_SEPARATOR uses x, w, color, pen format - read from properties panel
         const vSepX = document.getElementById('vSepX');
@@ -86,6 +100,13 @@ function addShape() {
         newShape.w = parseInt(vSepWidth?.value) || 2;        // line weight
         newShape.color = vSepColor?.value || '#000000';      // color
         newShape.pen = vSepPen?.value || '1';               // pen style
+        
+        // New v_separator properties
+        const vSepTag = document.getElementById('vSepTag');
+        const vSepVisible = document.getElementById('vSepVisible');
+        
+        newShape.tag = vSepTag?.value || '';                                      // tag string
+        newShape.visible = vSepVisible?.getAttribute('data-value') === 'true';    // visibility boolean
     } else if (shapeType === 'h_separator') {
         // H_SEPARATOR uses y, h, color, pen format - read from properties panel
         const hSepY = document.getElementById('hSepY');
@@ -97,6 +118,13 @@ function addShape() {
         newShape.h = parseInt(hSepHeight?.value) || 2;       // line weight (height/thickness)
         newShape.color = hSepColor?.value || '#000000';      // color
         newShape.pen = hSepPen?.value || '1';               // pen style
+        
+        // New h_separator properties
+        const hSepTag = document.getElementById('hSepTag');
+        const hSepVisible = document.getElementById('hSepVisible');
+        
+        newShape.tag = hSepTag?.value || '';                                      // tag string
+        newShape.visible = hSepVisible?.getAttribute('data-value') === 'true';    // visibility boolean
     }
     
     // Add new shape to the end of the array (user controls order)

@@ -52,6 +52,11 @@ function updateCanvas() {
 }
 
 function drawShape(shape, isSelected = false) {
+    // Check visibility for all shape types
+    if (shape.visible === false) {
+        return; // Don't draw invisible shapes
+    }
+    
     // Set colors and line width based on shape type
     if (shape.type === 'line') {
         ctx.strokeStyle = shape.f || '#000000'; // Line color (f)

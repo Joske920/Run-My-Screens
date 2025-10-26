@@ -133,6 +133,9 @@ function loadState() {
 function clearSavedState() {
     try {
         localStorage.removeItem(STORAGE_KEY);
+        // Reset redo/undo stack
+        undoStack = [];
+        redoStack = [];
         shapes = [];
         selectedShapeId = null;
         nextShapeId = 1;

@@ -19,13 +19,35 @@ function updateShapeControls() {
             document.getElementById('positionY').value = shape.y;
             document.getElementById('shapeWidth').value = shape.w || 100;
             document.getElementById('shapeHeight').value = shape.h || 100;
+            
+            // New ellipse/rectangle properties
+            const shapeTag = document.getElementById('shapeTag');
+            const shapeVisible = document.getElementById('shapeVisible');
+            
+            if (shapeTag) shapeTag.value = shape.tag || '';
+            if (shapeVisible) {
+                const visible = shape.visible !== undefined ? shape.visible : true;
+                shapeVisible.setAttribute('data-value', visible.toString());
+                shapeVisible.textContent = visible ? 'TRUE' : 'FALSE';
+            }
         } else if (shape.type === 'line') {
-            // Line: uses x1, y1, x2, y2, f properties
+            // Line: uses x1, y1, x2, y2, f, tag, visible properties
             document.getElementById('borderColor').value = shape.f || '#000000';
             document.getElementById('lineX1').value = shape.x1 || 50;
             document.getElementById('lineY1').value = shape.y1 || 50;
             document.getElementById('lineX2').value = shape.x2 || 150;
             document.getElementById('lineY2').value = shape.y2 || 150;
+            
+            // New line properties
+            const lineTag = document.getElementById('lineTag');
+            const lineVisible = document.getElementById('lineVisible');
+            
+            if (lineTag) lineTag.value = shape.tag || '';
+            if (lineVisible) {
+                const visible = shape.visible !== undefined ? shape.visible : true;
+                lineVisible.setAttribute('data-value', visible.toString());
+                lineVisible.textContent = visible ? 'TRUE' : 'FALSE';
+            }
         } else if (shape.type === 'v_separator') {
             // V_SEPARATOR: uses x, w, color, pen properties
             const vSepX = document.getElementById('vSepX');
@@ -37,6 +59,17 @@ function updateShapeControls() {
             if (vSepWidth) vSepWidth.value = shape.w || 2;
             if (vSepColor) vSepColor.value = shape.color || '#000000';
             if (vSepPen) vSepPen.value = shape.pen || '1';
+            
+            // New v_separator properties
+            const vSepTag = document.getElementById('vSepTag');
+            const vSepVisible = document.getElementById('vSepVisible');
+            
+            if (vSepTag) vSepTag.value = shape.tag || '';
+            if (vSepVisible) {
+                const visible = shape.visible !== undefined ? shape.visible : true;
+                vSepVisible.setAttribute('data-value', visible.toString());
+                vSepVisible.textContent = visible ? 'TRUE' : 'FALSE';
+            }
         } else if (shape.type === 'h_separator') {
             // H_SEPARATOR: uses y, h, color, pen properties
             const hSepY = document.getElementById('hSepY');
@@ -48,6 +81,17 @@ function updateShapeControls() {
             if (hSepHeight) hSepHeight.value = shape.h || 2;
             if (hSepColor) hSepColor.value = shape.color || '#000000';
             if (hSepPen) hSepPen.value = shape.pen || '1';
+            
+            // New h_separator properties
+            const hSepTag = document.getElementById('hSepTag');
+            const hSepVisible = document.getElementById('hSepVisible');
+            
+            if (hSepTag) hSepTag.value = shape.tag || '';
+            if (hSepVisible) {
+                const visible = shape.visible !== undefined ? shape.visible : true;
+                hSepVisible.setAttribute('data-value', visible.toString());
+                hSepVisible.textContent = visible ? 'TRUE' : 'FALSE';
+            }
         }
     } else {
         // No shape selected - show default values for the dropdown selection
@@ -63,6 +107,16 @@ function updateShapeControls() {
             document.getElementById('positionY').value = 50;
             document.getElementById('shapeWidth').value = 100;
             document.getElementById('shapeHeight').value = 100;
+            
+            // Default values for new ellipse/rectangle properties  
+            const shapeTag = document.getElementById('shapeTag');
+            const shapeVisible = document.getElementById('shapeVisible');
+            
+            if (shapeTag) shapeTag.value = '';
+            if (shapeVisible) {
+                shapeVisible.setAttribute('data-value', 'true');
+                shapeVisible.textContent = 'TRUE';
+            }
         } else if (shapeType === 'line') {
             document.getElementById('borderColor').value = '#000000';
             document.getElementById('borderStyle').value = '1';
@@ -70,6 +124,16 @@ function updateShapeControls() {
             document.getElementById('lineY1').value = 50;
             document.getElementById('lineX2').value = 150;
             document.getElementById('lineY2').value = 150;
+            
+            // Default values for new line properties
+            const lineTag = document.getElementById('lineTag');
+            const lineVisible = document.getElementById('lineVisible');
+            
+            if (lineTag) lineTag.value = '';
+            if (lineVisible) {
+                lineVisible.setAttribute('data-value', 'true');
+                lineVisible.textContent = 'TRUE';
+            }
         } else if (shapeType === 'v_separator') {
             const vSepX = document.getElementById('vSepX');
             const vSepWidth = document.getElementById('vSepWidth');
@@ -80,6 +144,16 @@ function updateShapeControls() {
             if (vSepWidth) vSepWidth.value = 2;
             if (vSepColor) vSepColor.value = '#000000';
             if (vSepPen) vSepPen.value = '1';
+            
+            // Default values for new v_separator properties
+            const vSepTag = document.getElementById('vSepTag');
+            const vSepVisible = document.getElementById('vSepVisible');
+            
+            if (vSepTag) vSepTag.value = '';
+            if (vSepVisible) {
+                vSepVisible.setAttribute('data-value', 'true');
+                vSepVisible.textContent = 'TRUE';
+            }
         } else if (shapeType === 'h_separator') {
             const hSepY = document.getElementById('hSepY');
             const hSepHeight = document.getElementById('hSepHeight');
@@ -90,6 +164,16 @@ function updateShapeControls() {
             if (hSepHeight) hSepHeight.value = 2;
             if (hSepColor) hSepColor.value = '#000000';
             if (hSepPen) hSepPen.value = '1';
+            
+            // Default values for new h_separator properties
+            const hSepTag = document.getElementById('hSepTag');
+            const hSepVisible = document.getElementById('hSepVisible');
+            
+            if (hSepTag) hSepTag.value = '';
+            if (hSepVisible) {
+                hSepVisible.setAttribute('data-value', 'true');
+                hSepVisible.textContent = 'TRUE';
+            }
         }
     }
     
@@ -174,19 +258,29 @@ function updatePropertyVisibility(shapeType) {
 function formatShapeProperties(shape) {
     switch(shape.type) {
         case 'ellipse':
-            return `ELLIPSE(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'})`;
+            const ellipseTag = shape.tag ? `,"${shape.tag}"` : '';
+            const ellipseVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
+            return `ELLIPSE(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'}${ellipseTag}${ellipseVisible})`;
             
         case 'rectangle':
-            return `RECT(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'})`;
+            const rectTag = shape.tag ? `,"${shape.tag}"` : '';
+            const rectVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
+            return `RECT(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'}${rectTag}${rectVisible})`;
             
         case 'line':
-            return `LINE(${shape.x1 || 0},${shape.y1 || 0},${shape.x2 || 0},${shape.y2 || 0},"${shape.f || '#000000'}",${shape.s || '1'})`;
+            const tag = shape.tag ? `,"${shape.tag}"` : '';
+            const visible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
+            return `LINE(${shape.x1 || 0},${shape.y1 || 0},${shape.x2 || 0},${shape.y2 || 0},"${shape.f || '#000000'}",${shape.s || '1'}${tag}${visible})`;
             
         case 'v_separator':
-            return `V_SEPARATOR(${shape.x || 0},${shape.w || 2},"${shape.color || '#000000'}",${shape.pen || '1'})`;
+            const vSepTag = shape.tag ? `,"${shape.tag}"` : '';
+            const vSepVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
+            return `V_SEPARATOR(${shape.x || 0},${shape.w || 2},"${shape.color || '#000000'}",${shape.pen || '1'}${vSepTag}${vSepVisible})`;
             
         case 'h_separator':
-            return `H_SEPARATOR(${shape.y || 0},${shape.h || 2},"${shape.color || '#000000'}",${shape.pen || '1'})`;
+            const hSepTag = shape.tag ? `,"${shape.tag}"` : '';
+            const hSepVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
+            return `H_SEPARATOR(${shape.y || 0},${shape.h || 2},"${shape.color || '#000000'}",${shape.pen || '1'}${hSepTag}${hSepVisible})`;
             
         default:
             return `${shape.type.toUpperCase()} (unknown format)`;

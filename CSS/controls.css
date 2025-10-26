@@ -235,3 +235,30 @@ h3 {
 .delete-btn:hover:not(:disabled) {
     background: #c82333;
 }
+
+/* Toggle button for boolean properties */
+.toggle-button {
+    width: 100%;
+    padding: 8px 12px;
+    border: 2px solid #007bff;
+    border-radius: 4px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    transition: all 0.2s ease;
+}
+
+.toggle-button[data-value="false"] {
+    background: #6c757d;
+    border-color: #6c757d;
+}
+
+.toggle-button:hover {
+    opacity: 0.8;
+}
+
+.toggle-button:active {
+    transform: scale(0.98);
+}

@@ -107,28 +107,7 @@
                         </select>
                     </div>
                     
-                    <!-- Universal Properties -->
-                    <div class="control-group ellipse-rectangle-only line-only">
-                        <label for="borderStyle">Border Style:</label>
-                        <select id="borderStyle">
-                            <option value="1">Solid</option>
-                            <option value="2">Dashed</option>
-                            <option value="3">Dotted</option>
-                            <option value="4">Dashed and Dotted</option>
-                        </select>
-                    </div>
-                    
-                    <div class="control-group ellipse-rectangle-only line-only">
-                        <label for="borderColor">Border Color (f1):</label>
-                        <input type="color" id="borderColor" value="#000000">
-                    </div>
-                    
-                    <div class="control-group ellipse-rectangle-only">
-                        <label for="fillColor">Fill Color (f2):</label>
-                        <input type="color" id="fillColor" value="#ff0000">
-                    </div>
-                    
-                    <!-- Position and size properties -->
+                    <!-- Position and size properties (x,y,w,h) -->
                     <div class="control-group control-row ellipse-rectangle-only">
                         <div class="control-half">
                             <label for="positionX" id="positionXLabel">X Position:</label>
@@ -140,7 +119,6 @@
                         </div>
                     </div>
                     
-                    <!-- Ellipse and Rectangle properties (both use w, h) -->
                     <div class="control-group control-row ellipse-rectangle-only">
                         <div class="control-half">
                             <label for="shapeWidth">Width (w):</label>
@@ -152,13 +130,34 @@
                         </div>
                     </div>
                     
-                    <!-- Ellipse/Rectangle tag property -->
+                    <!-- Color properties (f1,f2) -->
+                    <div class="control-group ellipse-rectangle-only line-only">
+                        <label for="borderColor">Border Color (f1):</label>
+                        <input type="color" id="borderColor" value="#000000">
+                    </div>
+                    
+                    <div class="control-group ellipse-rectangle-only">
+                        <label for="fillColor">Fill Color (f2):</label>
+                        <input type="color" id="fillColor" value="#ff0000">
+                    </div>
+                    
+                    <!-- Style property (s) -->
+                    <div class="control-group ellipse-rectangle-only line-only">
+                        <label for="borderStyle">Border Style:</label>
+                        <select id="borderStyle">
+                            <option value="1">Solid</option>
+                            <option value="2">Dashed</option>
+                            <option value="3">Dotted</option>
+                            <option value="4">Dashed and Dotted</option>
+                        </select>
+                    </div>
+                    
+                    <!-- Tag and visibility properties -->
                     <div class="control-group ellipse-rectangle-only">
                         <label for="shapeTag">Tag:</label>
                         <input type="text" id="shapeTag" value="" placeholder="Enter tag...">
                     </div>
                     
-                    <!-- Ellipse/Rectangle visibility property -->
                     <div class="control-group ellipse-rectangle-only">
                         <label for="shapeVisible">Visible:</label>
                         <button type="button" id="shapeVisible" class="toggle-button" data-value="true">TRUE</button>

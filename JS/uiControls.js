@@ -258,27 +258,27 @@ function updatePropertyVisibility(shapeType) {
 function formatShapeProperties(shape) {
     switch(shape.type) {
         case 'ellipse':
-            const ellipseTag = shape.tag ? `,"${shape.tag}"` : '';
+            const ellipseTag = shape.tag ? `,"${shape.tag}"` : ',';
             const ellipseVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
             return `ELLIPSE(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'}${ellipseTag}${ellipseVisible})`;
             
         case 'rectangle':
-            const rectTag = shape.tag ? `,"${shape.tag}"` : '';
+            const rectTag = shape.tag ? `,"${shape.tag}"` : ',';
             const rectVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
             return `RECT(${shape.x || 0},${shape.y || 0},${shape.w || 100},${shape.h || 100},"${shape.f1 || '#000000'}","${shape.f2 || '#ff0000'}",${shape.s || '1'}${rectTag}${rectVisible})`;
             
         case 'line':
-            const tag = shape.tag ? `,"${shape.tag}"` : '';
+            const tag = shape.tag ? `,"${shape.tag}"` : ',';
             const visible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
             return `LINE(${shape.x1 || 0},${shape.y1 || 0},${shape.x2 || 0},${shape.y2 || 0},"${shape.f || '#000000'}",${shape.s || '1'}${tag}${visible})`;
             
         case 'v_separator':
-            const vSepTag = shape.tag ? `,"${shape.tag}"` : '';
+            const vSepTag = shape.tag ? `,"${shape.tag}"` : ',';
             const vSepVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
             return `V_SEPARATOR(${shape.x || 0},${shape.w || 2},"${shape.color || '#000000'}",${shape.pen || '1'}${vSepTag}${vSepVisible})`;
             
         case 'h_separator':
-            const hSepTag = shape.tag ? `,"${shape.tag}"` : '';
+            const hSepTag = shape.tag ? `,"${shape.tag}"` : ',';
             const hSepVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
             return `H_SEPARATOR(${shape.y || 0},${shape.h || 2},"${shape.color || '#000000'}",${shape.pen || '1'}${hSepTag}${hSepVisible})`;
             

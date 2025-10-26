@@ -41,6 +41,10 @@
             </div>
             
             <div class="control-group">
+                <button onclick="downloadShapeList()">Download Shape List (.com.txt)</button>
+            </div>
+            
+            <div class="control-group">
                 <button onclick="clearSavedState(); location.reload();" style="background-color: #dc3545; margin-top: 10px;">Reset All Settings</button>
             </div>
         </div>
@@ -65,6 +69,12 @@
                 </div>
                 <div class="canvas-container">
                     <canvas id="myCanvas" width="600" height="400"></canvas>
+                </div>
+                <div class="graphic-logic-section">
+                    <h4 class="graphic-logic-title">Graphic Logic</h4>
+                    <div class="graphic-logic-container">
+                        <textarea id="graphicLogicText" class="graphic-logic-textarea" placeholder="Enter graphic logic code here..." rows="6"></textarea>
+                    </div>
                 </div>
             </div>
         </div>

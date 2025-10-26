@@ -448,3 +448,39 @@ function closeSidebar() {
     sidebar.classList.remove('open');
     overlay.classList.remove('active');
 }
+
+function downloadShapeList() {
+    // Generate text content with all shapes without ID numbers
+    let textContent = '';
+    
+    shapes.forEach((shape, index) => {
+        if (index > 0) {
+            textContent += '\n'; // Add newline between shapes
+        }
+        textContent += formatShapeProperties(shape);
+    });
+    
+    // Create and download the file
+    const blob = new Blob([textContent], { type: 'text/plain' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    
+    // Generate filename with current timestamp
+    const now = new Date();
+    const timestamp = now.toISOString().replace(/[:.]/g, '-').slice(0, -5); // Remove milliseconds and replace colons/dots
+    const filename = `shapes_${timestamp}.com.txt`;
+    
+    a.style.display = 'none';
+    a.href = url;
+    a.download = filename;
+    
+    document.body.appendChild(a);
+    a.click();
+    
+    // Clean up
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+    
+    // Show status indicator
+    showStatusIndicator(`Shape list downloaded as ${filename}`);
+}

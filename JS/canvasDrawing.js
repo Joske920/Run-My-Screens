@@ -57,6 +57,11 @@ function drawShape(shape, isSelected = false) {
         return; // Don't draw invisible shapes
     }
     
+    // DEF shapes are variable definitions and should not be drawn on canvas
+    if (shape.type === 'def') {
+        return; // DEF shapes are not visual elements
+    }
+    
     // Set colors and line width based on shape type
     if (shape.type === 'line') {
         ctx.strokeStyle = shape.f || '#000000'; // Line color (f)

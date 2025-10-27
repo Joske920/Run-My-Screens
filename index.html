@@ -109,12 +109,83 @@
                     <div class="control-group">
                         <label for="shapeType">Shape Type:</label>
                         <select id="shapeType">
+                            <option value="def">DEF</option>
                             <option value="ellipse">Ellipse</option>
                             <option value="rectangle">Rectangle</option>
                             <option value="line">Line</option>
                             <option value="v_separator">V Separator</option>
                             <option value="h_separator">H Separator</option>
                         </select>
+                    </div>
+                    
+                    <!-- DEF properties -->
+                    <div class="control-group def-only">
+                        <label for="defVariableName">Variable Name:</label>
+                        <input type="text" id="defVariableName" value="" placeholder="Enter variable name...">
+                    </div>
+                    
+                    <div class="control-group def-only">
+                        <label for="defVariableType">Variable Type:</label>
+                        <select id="defVariableType">
+                            <optgroup label="REAL">
+                                <option value="R">R - REAL</option>
+                                <option value="R[0]">R[0] - REAL (0 decimal places)</option>
+                                <option value="R[1]">R[1] - REAL (1 decimal place)</option>
+                                <option value="R[2]">R[2] - REAL (2 decimal places)</option>
+                                <option value="R[3]">R[3] - REAL (3 decimal places)</option>
+                                <option value="R[4]">R[4] - REAL (4 decimal places)</option>
+                                <option value="R[5]">R[5] - REAL (5 decimal places)</option>
+                            </optgroup>
+                            <optgroup label="INTEGER">
+                                <option value="I">I - INTEGER (32 bits decimal signed)</option>
+                                <option value="IB">IB - INTEGER (32 bits binary)</option>
+                                <option value="IBD">IBD - INTEGER (32 bits binary)</option>
+                                <option value="IBW">IBW - INTEGER (16 bits binary)</option>
+                                <option value="IBB">IBB - INTEGER (8 bits binary)</option>
+                                <option value="IDD">IDD - INTEGER (32 bits decimal signed)</option>
+                                <option value="IDW">IDW - INTEGER (16 bits decimal signed)</option>
+                                <option value="IDB">IDB - INTEGER (8 bits decimal signed)</option>
+                                <option value="IDDU">IDDU - INTEGER (32 bits decimal unsigned)</option>
+                                <option value="IDWU">IDWU - INTEGER (16 bits decimal unsigned)</option>
+                                <option value="IDBU">IDBU - INTEGER (8 bits decimal unsigned)</option>
+                                <option value="IH">IH - INTEGER (32 bits hexadecimal)</option>
+                                <option value="IHDU">IHDU - INTEGER (32 bits hexadecimal)</option>
+                                <option value="IHWU">IHWU - INTEGER (16 bits hexadecimal)</option>
+                                <option value="IHBU">IHBU - INTEGER (8 bits hexadecimal)</option>
+                            </optgroup>
+                            <optgroup label="STRING">
+                                <option value="S">S - STRING</option>
+                                <option value="S[1]">S[1] - STRING (1 character)</option>
+                                <option value="S[10]">S[10] - STRING (10 characters)</option>
+                                <option value="S[20]">S[20] - STRING (20 characters)</option>
+                                <option value="S[50]">S[50] - STRING (50 characters)</option>
+                                <option value="S[100]">S[100] - STRING (100 characters)</option>
+                                <option value="S[255]">S[255] - STRING (255 characters)</option>
+                            </optgroup>
+                            <optgroup label="OTHER">
+                                <option value="C">C - CHARACTER</option>
+                                <option value="B">B - BOOL</option>
+                                <option value="V">V - VARIANT</option>
+                            </optgroup>
+                        </select>
+                    </div>
+                    
+                    <div class="control-group def-only" id="defLimitsGroup">
+                        <label for="defLimits">Limits (MIN,MAX):</label>
+                        <input type="text" id="defLimits" value="" placeholder='e.g. 0,100 or "A","F"'>
+                        <small class="help-text">For types I, C, R only. Use decimal values or characters like "A","F"</small>
+                    </div>
+                    
+                    <div class="control-group def-only">
+                        <label for="defDefaultValue">Default Value:</label>
+                        <input type="text" id="defDefaultValue" value="" placeholder="Enter default value (optional)">
+                        <small class="help-text">If empty and no toggle field defined, status is "not calculated"</small>
+                    </div>
+                    
+                    <div class="control-group def-only">
+                        <label for="defToggle">Toggle:</label>
+                        <input type="text" id="defToggle" value="" placeholder='e.g. * 0,1,2,3 or * "On","Off" or * 1="On",0="Off"'>
+                        <small class="help-text">List with predetermined entries. Starts with * and entries separated by commas</small>
                     </div>
                     
                     <!-- Position and size properties (x,y,w,h) -->

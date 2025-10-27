@@ -17,9 +17,20 @@ function setupEventListeners() {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
                 const oldType = shape.type;
-                shape.type = this.value;
+                const newType = this.value;
                 
-                // Convert between shape types while preserving position
+                // DEF shapes cannot be converted to/from other shapes due to completely different properties
+                if ((oldType === 'def' && newType !== 'def') || (oldType !== 'def' && newType === 'def')) {
+                    // Deselect the current shape instead of converting
+                    selectedShapeId = null;
+                    updateShapeControls(); // Update controls to show new shape type defaults
+                    updateCanvas(); // Refresh canvas to remove selection indicators
+                    return;
+                }
+                
+                shape.type = newType;
+                
+                // Convert between compatible shape types while preserving position
                 if (oldType !== shape.type) {
                     saveStateToUndo(); // Save state before type conversion
                     if (shape.type === 'line') {
@@ -66,6 +77,73 @@ function setupEventListeners() {
             // No shape selected - update property visibility and default values for new shape creation
             updateShapeControls(); // This will now handle the dropdown selection case
         }
+    });
+    
+    // DEF shape property handlers
+    addEventListenerSafe('defVariableName', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing variable name
+                shape.variableName = this.value;
+                updateShapesList(); // Update list to reflect new variable name
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defVariableType', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing variable type
+                shape.variableType = this.value;
+                updateShapesList(); // Update list to reflect new variable type
+                saveState();
+            }
+        }
+        // Update limits field visibility based on variable type
+        updateDefLimitsVisibility(this.value);
+    });
+    
+    addEventListenerSafe('defLimits', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing limits
+                shape.limits = this.value;
+                updateShapesList(); // Update list to reflect new limits
+                saveState();
+            }
+        }
+        // Validate default value against new limits
+        validateDefaultValue();
+    });
+    
+    addEventListenerSafe('defDefaultValue', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing default value
+                shape.defaultValue = this.value;
+                saveState();
+            }
+        }
+        // Validate default value against toggle options
+        validateDefaultValue();
+    });
+    
+    addEventListenerSafe('defToggle', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing toggle
+                shape.toggle = this.value;
+                saveState();
+            }
+        }
+        // Validate default value against new toggle options
+        validateDefaultValue();
     });
     
     addEventListenerSafe('borderStyle', 'change', function() {

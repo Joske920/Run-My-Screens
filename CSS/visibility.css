@@ -48,6 +48,14 @@
     display: block;
 }
 
+.def-only {
+    display: none;
+}
+
+.def-only.show {
+    display: block;
+}
+
 .h-separator-only.show.control-row {
     display: flex;
 }

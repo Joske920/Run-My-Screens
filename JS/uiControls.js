@@ -11,7 +11,27 @@ function updateShapeControls() {
         // Update property visibility and labels based on shape type
         updatePropertyVisibility(shape.type);
         
-        if (shape.type === 'ellipse' || shape.type === 'rectangle') {
+        if (shape.type === 'def') {
+            // DEF: uses variableName, variableType, limits, defaultValue, and toggle properties
+            const defVariableName = document.getElementById('defVariableName');
+            const defVariableType = document.getElementById('defVariableType');
+            const defLimits = document.getElementById('defLimits');
+            const defDefaultValue = document.getElementById('defDefaultValue');
+            const defToggle = document.getElementById('defToggle');
+            
+            if (defVariableName) defVariableName.value = shape.variableName || '';
+            if (defVariableType) {
+                defVariableType.value = shape.variableType || 'I';
+                // Update limits visibility based on variable type
+                updateDefLimitsVisibility(shape.variableType || 'I');
+            }
+            if (defLimits) defLimits.value = shape.limits || '';
+            if (defDefaultValue) defDefaultValue.value = shape.defaultValue || '';
+            if (defToggle) defToggle.value = shape.toggle || '';
+            
+            // Validate default value against toggle options after loading
+            validateDefaultValue();
+        } else if (shape.type === 'ellipse' || shape.type === 'rectangle') {
             // Ellipse and Rectangle: both use x, y, w, h properties
             document.getElementById('borderColor').value = shape.f1 || '#000000';
             document.getElementById('fillColor').value = shape.f2 || '#ff0000';
@@ -195,12 +215,17 @@ function updateAddButtonText() {
 }
 
 function updatePropertyVisibility(shapeType) {
+    const defControls = document.querySelectorAll('.def-only');
     const ellipseRectangleControls = document.querySelectorAll('.ellipse-rectangle-only');
     const lineControls = document.querySelectorAll('.line-only');
     const vSeparatorControls = document.querySelectorAll('.v-separator-only');
     const hSeparatorControls = document.querySelectorAll('.h-separator-only');
     
     // Hide all controls first
+    defControls.forEach(control => {
+        control.classList.remove('show');
+        control.style.display = 'none';
+    });
     ellipseRectangleControls.forEach(control => {
         control.classList.add('hide');
         control.style.display = 'none';
@@ -218,7 +243,18 @@ function updatePropertyVisibility(shapeType) {
         control.style.display = 'none';
     });
     
-    if (shapeType === 'ellipse' || shapeType === 'rectangle') {
+    if (shapeType === 'def') {
+        // Show DEF controls (variable name, variable type)
+        defControls.forEach(control => {
+            control.classList.add('show');
+            control.style.display = 'block';
+        });
+        // Update limits visibility based on default or selected variable type
+        const defVariableType = document.getElementById('defVariableType');
+        if (defVariableType) {
+            updateDefLimitsVisibility(defVariableType.value || 'I');
+        }
+    } else if (shapeType === 'ellipse' || shapeType === 'rectangle') {
         // Show ellipse/rectangle controls (w, h)
         ellipseRectangleControls.forEach(control => {
             control.classList.remove('hide');
@@ -257,6 +293,12 @@ function updatePropertyVisibility(shapeType) {
 // Helper function to format shape properties for display
 function formatShapeProperties(shape) {
     switch(shape.type) {
+        case 'def':
+            const limitsText = shape.limits ? `/${shape.limits}` : '';
+            const defaultText = shape.defaultValue ? `/${shape.defaultValue}` : '';
+            const toggleText = shape.toggle ? `/${shape.toggle}` : '';
+            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}/)`;
+            
         case 'ellipse':
             const ellipseTag = shape.tag ? `,"${shape.tag}"` : ',';
             const ellipseVisible = shape.visible !== undefined ? (shape.visible ? ',1' : ',0') : ',1';
@@ -290,6 +332,14 @@ function formatShapeProperties(shape) {
 // Helper function to get representative color(s) for shape preview
 function getShapePreviewColor(shape) {
     switch(shape.type) {
+        case 'def':
+            // DEF shapes get a neutral gray color for preview
+            return {
+                primary: '#6c757d',
+                secondary: null,
+                hasBorder: false
+            };
+            
         case 'ellipse':
         case 'rectangle':
             // For shapes with both border and fill, show fill color as primary
@@ -483,4 +533,214 @@ function downloadShapeList() {
     
     // Show status indicator
     showStatusIndicator(`Shape list downloaded as ${filename}`);
+}
+
+// Function to show/hide limits field based on variable type
+function updateDefLimitsVisibility(variableType) {
+    const limitsGroup = document.getElementById('defLimitsGroup');
+    if (!limitsGroup) return;
+    
+    // Limits are only available for types I (INTEGER), C (CHARACTER), and R (REAL)
+    const supportsLimits = variableType === 'I' || 
+                          variableType === 'C' || 
+                          variableType === 'R' ||
+                          variableType.startsWith('I') || // All INTEGER variants
+                          variableType.startsWith('R['); // All REAL variants
+    
+    if (supportsLimits) {
+        limitsGroup.style.display = 'block';
+    } else {
+        limitsGroup.style.display = 'none';
+        // Clear limits value if type doesn't support it
+        const defLimits = document.getElementById('defLimits');
+        if (defLimits && selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                defLimits.value = '';
+                shape.limits = '';
+            }
+        }
+    }
+}
+
+// Function to parse toggle field and extract valid values
+function parseToggleOptions(toggleText) {
+    if (!toggleText || !toggleText.trim().startsWith('*')) {
+        return [];
+    }
+    
+    // Remove the leading * and trim
+    const content = toggleText.substring(1).trim();
+    
+    if (!content) {
+        // Just * means variable toggle field - no specific options
+        return [];
+    }
+    
+    const options = [];
+    
+    // Split by comma but handle quoted strings properly
+    const parts = content.split(',');
+    let currentPart = '';
+    let inQuotes = false;
+    
+    for (let i = 0; i < parts.length; i++) {
+        const part = parts[i].trim();
+        
+        if (!inQuotes && part.includes('"')) {
+            // Check if it's a complete quoted string
+            if (part.match(/^"[^"]*"$/)) {
+                // Complete quoted string
+                options.push(part);
+            } else if (part.startsWith('"')) {
+                // Start of quoted string
+                currentPart = part;
+                inQuotes = true;
+            }
+        } else if (inQuotes) {
+            // Continue building quoted string
+            currentPart += ',' + part;
+            if (part.endsWith('"')) {
+                options.push(currentPart);
+                currentPart = '';
+                inQuotes = false;
+            }
+        } else {
+            // Regular value or key=value pair
+            if (part.includes('=')) {
+                // Extended format like 1="On" - extract the key (before =)
+                const key = part.split('=')[0].trim();
+                options.push(key);
+            } else {
+                // Simple value
+                options.push(part);
+            }
+        }
+    }
+    
+    return options;
+}
+
+// Function to parse limits and extract min/max values
+function parseLimits(limitsText) {
+    if (!limitsText || !limitsText.trim()) {
+        return null;
+    }
+    
+    const parts = limitsText.split(',');
+    if (parts.length !== 2) {
+        return null;
+    }
+    
+    let min = parts[0].trim();
+    let max = parts[1].trim();
+    
+    // Handle quoted character limits like "A","F"
+    if (min.startsWith('"') && min.endsWith('"') && max.startsWith('"') && max.endsWith('"')) {
+        min = min.slice(1, -1); // Remove quotes
+        max = max.slice(1, -1); // Remove quotes
+        return { min, max, type: 'character' };
+    }
+    
+    // Handle numeric limits
+    const minNum = parseFloat(min);
+    const maxNum = parseFloat(max);
+    
+    if (!isNaN(minNum) && !isNaN(maxNum)) {
+        return { min: minNum, max: maxNum, type: 'numeric' };
+    }
+    
+    return null;
+}
+
+// Function to validate default value against toggle options and limits
+function validateDefaultValue() {
+    const defDefaultValue = document.getElementById('defDefaultValue');
+    const defToggle = document.getElementById('defToggle');
+    const defLimits = document.getElementById('defLimits');
+    
+    if (!defDefaultValue) return;
+    
+    const defaultValue = defDefaultValue.value.trim();
+    
+    // Clear any existing error state
+    defDefaultValue.classList.remove('input-error');
+    
+    // If no default value, no validation needed
+    if (!defaultValue) {
+        return;
+    }
+    
+    let isValid = true;
+    
+    // Validate against toggle options if toggle is set
+    if (defToggle) {
+        const toggleText = defToggle.value.trim();
+        if (toggleText) {
+            const toggleOptions = parseToggleOptions(toggleText);
+            
+            // If there are specific toggle options, validate against them
+            if (toggleOptions.length > 0) {
+                let matchesToggle = false;
+                
+                for (const option of toggleOptions) {
+                    // Remove quotes for comparison if present
+                    const cleanOption = option.replace(/^"(.*)"$/, '$1');
+                    const cleanDefault = defaultValue.replace(/^"(.*)"$/, '$1');
+                    
+                    if (cleanOption === cleanDefault || option === defaultValue) {
+                        matchesToggle = true;
+                        break;
+                    }
+                }
+                
+                if (!matchesToggle) {
+                    isValid = false;
+                }
+            }
+        }
+    }
+    
+    // Validate against limits if limits are set
+    if (defLimits && isValid) { // Only check limits if toggle validation passed
+        const limitsText = defLimits.value.trim();
+        if (limitsText) {
+            const limits = parseLimits(limitsText);
+            
+            if (limits) {
+                if (limits.type === 'character') {
+                    // Character range validation
+                    const cleanDefault = defaultValue.replace(/^"(.*)"$/, '$1');
+                    if (cleanDefault.length === 1) {
+                        const defaultChar = cleanDefault.charCodeAt(0);
+                        const minChar = limits.min.charCodeAt(0);
+                        const maxChar = limits.max.charCodeAt(0);
+                        
+                        if (defaultChar < minChar || defaultChar > maxChar) {
+                            isValid = false;
+                        }
+                    } else {
+                        isValid = false; // Not a single character
+                    }
+                } else if (limits.type === 'numeric') {
+                    // Numeric range validation
+                    const cleanDefault = defaultValue.replace(/^"(.*)"$/, '$1');
+                    const defaultNum = parseFloat(cleanDefault);
+                    
+                    if (!isNaN(defaultNum)) {
+                        if (defaultNum < limits.min || defaultNum > limits.max) {
+                            isValid = false;
+                        }
+                    } else {
+                        isValid = false; // Not a valid number
+                    }
+                }
+            }
+        }
+    }
+    
+    // Apply error state if invalid
+    if (!isValid) {
+        defDefaultValue.classList.add('input-error');
+    }
 }

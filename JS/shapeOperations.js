@@ -58,7 +58,14 @@ function addShape() {
         zOrder: getShapeZOrder(shapeType) // Add z-order based on shape type
     };
     
-    if (shapeType === 'ellipse' || shapeType === 'rectangle') {
+    if (shapeType === 'def') {
+        // DEF uses variableName, variableType, limits, defaultValue, and toggle format - read from properties panel
+        newShape.variableName = document.getElementById('defVariableName').value || 'variable';
+        newShape.variableType = document.getElementById('defVariableType').value || 'I';
+        newShape.limits = document.getElementById('defLimits').value || '';
+        newShape.defaultValue = document.getElementById('defDefaultValue').value || '';
+        newShape.toggle = document.getElementById('defToggle').value || '';
+   } else if (shapeType === 'ellipse' || shapeType === 'rectangle') {
         // Ellipse and Rectangle use x, y, w, h format - read from properties panel
         newShape.f1 = document.getElementById('borderColor').value || '#000000'; // border color
         newShape.f2 = document.getElementById('fillColor').value || '#ff0000';   // fill color

@@ -60,6 +60,8 @@ function updateShapeControls() {
             const defAlignment = document.getElementById('defAlignment');
             const defFontSize = document.getElementById('defFontSize');
             const defLimitsCheck = document.getElementById('defLimitsCheck');
+            const defChangeMethod = document.getElementById('defChangeMethod');
+            const defEmptyInput = document.getElementById('defEmptyInput');
             
             if (shape.attributes) {
                 if (defDisplayMode) defDisplayMode.value = shape.attributes.displayMode || '';
@@ -71,6 +73,8 @@ function updateShapeControls() {
                 if (defAlignment) defAlignment.value = shape.attributes.alignment || '';
                 if (defFontSize) defFontSize.value = shape.attributes.fontSize || '';
                 if (defLimitsCheck) defLimitsCheck.value = shape.attributes.limitsCheck || '';
+                if (defChangeMethod) defChangeMethod.value = shape.attributes.changeMethod || '';
+                if (defEmptyInput) defEmptyInput.value = shape.attributes.emptyInput || '';
             } else {
                 if (defDisplayMode) defDisplayMode.value = '';
                 if (defDisplayOption) defDisplayOption.value = '';
@@ -81,6 +85,49 @@ function updateShapeControls() {
                 if (defAlignment) defAlignment.value = '';
                 if (defFontSize) defFontSize.value = '';
                 if (defLimitsCheck) defLimitsCheck.value = '';
+                if (defChangeMethod) defChangeMethod.value = '';
+                if (defEmptyInput) defEmptyInput.value = '';
+            }
+            
+            // Populate help display field
+            const defHelpDisplay = document.getElementById('defHelpDisplay');
+            if (defHelpDisplay) defHelpDisplay.value = shape.helpDisplay || '';
+            
+            // Populate system variable
+            const defSystemVariable = document.getElementById('defSystemVariable');
+            if (defSystemVariable) defSystemVariable.value = shape.systemVariable || '';
+            
+            // Populate short text position fields
+            const defShortTextX = document.getElementById('defShortTextX');
+            const defShortTextY = document.getElementById('defShortTextY');
+            const defShortTextWidth = document.getElementById('defShortTextWidth');
+            
+            if (shape.shortTextPos) {
+                if (defShortTextX) defShortTextX.value = shape.shortTextPos.x || 10;
+                if (defShortTextY) defShortTextY.value = shape.shortTextPos.y || 20;
+                if (defShortTextWidth) defShortTextWidth.value = shape.shortTextPos.width || 100;
+            } else {
+                if (defShortTextX) defShortTextX.value = 10;
+                if (defShortTextY) defShortTextY.value = 20;
+                if (defShortTextWidth) defShortTextWidth.value = 100;
+            }
+            
+            // Populate IO field position fields
+            const defIOFieldX = document.getElementById('defIOFieldX');
+            const defIOFieldY = document.getElementById('defIOFieldY');
+            const defIOFieldWidth = document.getElementById('defIOFieldWidth');
+            const defIOFieldHeight = document.getElementById('defIOFieldHeight');
+            
+            if (shape.ioFieldPos) {
+                if (defIOFieldX) defIOFieldX.value = shape.ioFieldPos.x || 50;
+                if (defIOFieldY) defIOFieldY.value = shape.ioFieldPos.y || 40;
+                if (defIOFieldWidth) defIOFieldWidth.value = shape.ioFieldPos.width || 120;
+                if (defIOFieldHeight) defIOFieldHeight.value = shape.ioFieldPos.height || 25;
+            } else {
+                if (defIOFieldX) defIOFieldX.value = 50;
+                if (defIOFieldY) defIOFieldY.value = 40;
+                if (defIOFieldWidth) defIOFieldWidth.value = 120;
+                if (defIOFieldHeight) defIOFieldHeight.value = 25;
             }
             
         // Format texts part
@@ -376,7 +423,7 @@ function formatShapeProperties(shape) {
             ];
             const textsText = `/${textsArray.join(',')}`;
             
-            // Format attributes: all 9 attribute types
+            // Format attributes: all 11 attribute types
             const attributes = shape.attributes || {};
             const attributesArray = [];
             if (attributes.displayMode) attributesArray.push(attributes.displayMode);
@@ -388,9 +435,35 @@ function formatShapeProperties(shape) {
             if (attributes.alignment) attributesArray.push(attributes.alignment);
             if (attributes.fontSize) attributesArray.push(attributes.fontSize);
             if (attributes.limitsCheck) attributesArray.push(attributes.limitsCheck);
+            if (attributes.changeMethod) attributesArray.push(attributes.changeMethod);
+            if (attributes.emptyInput) attributesArray.push(attributes.emptyInput);
             const attributesText = attributesArray.length > 0 ? `/${attributesArray.join(',')}` : '';
             
-            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}${textsText}${attributesText}/)`;
+            // Format help display file (with quotes if exists)
+            const helpDisplayText = shape.helpDisplay ? `/"${shape.helpDisplay}"` : '/';
+            
+            // Format system variable (with quotes if exists)
+            const systemVariableText = shape.systemVariable ? `/"${shape.systemVariable}"` : '/';
+            
+            // Format position properties from individual fields
+            let shortTextPosText = '';
+            if (shape.shortTextPos) {
+                const x = shape.shortTextPos.x || 0;
+                const y = shape.shortTextPos.y || 0;
+                const w = shape.shortTextPos.width || 0;
+                shortTextPosText = `/${x},${y},${w}`;
+            }
+            
+            let ioFieldPosText = '';
+            if (shape.ioFieldPos) {
+                const x = shape.ioFieldPos.x || 0;
+                const y = shape.ioFieldPos.y || 0;
+                const w = shape.ioFieldPos.width || 0;
+                const h = shape.ioFieldPos.height || 0;
+                ioFieldPosText = `/${x},${y},${w},${h}`;
+            }
+            
+            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}${textsText}${attributesText}${helpDisplayText}${systemVariableText}${shortTextPosText}${ioFieldPosText}/)`;
             
         case 'ellipse':
             const ellipseTag = shape.tag ? `,"${shape.tag}"` : ',';

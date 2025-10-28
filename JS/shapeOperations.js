@@ -75,7 +75,7 @@ function addShape() {
             tooltip: document.getElementById('defTooltip').value || ''
         };
         
-        // Add attributes properties (all 9 attribute types)
+        // Add attributes properties (all 11 attribute types)
         newShape.attributes = {
             displayMode: document.getElementById('defDisplayMode').value || '',
             displayOption: document.getElementById('defDisplayOption').value || '',
@@ -85,8 +85,31 @@ function addShape() {
             accessLevel: document.getElementById('defAccessLevel').value || '',
             alignment: document.getElementById('defAlignment').value || '',
             fontSize: document.getElementById('defFontSize').value || '',
-            limitsCheck: document.getElementById('defLimitsCheck').value || ''
+            limitsCheck: document.getElementById('defLimitsCheck').value || '',
+            changeMethod: document.getElementById('defChangeMethod').value || '',
+            emptyInput: document.getElementById('defEmptyInput').value || ''
         };
+        
+        // Add help display property
+        newShape.helpDisplay = document.getElementById('defHelpDisplay').value || '';
+        
+        // Add system variable property
+        newShape.systemVariable = document.getElementById('defSystemVariable').value || '';
+        
+        // Add position properties as objects with individual x,y,width,height values
+        newShape.shortTextPos = {
+            x: parseInt(document.getElementById('defShortTextX').value) || 10,
+            y: parseInt(document.getElementById('defShortTextY').value) || 20,
+            width: parseInt(document.getElementById('defShortTextWidth').value) || 100
+        };
+        
+        newShape.ioFieldPos = {
+            x: parseInt(document.getElementById('defIOFieldX').value) || 50,
+            y: parseInt(document.getElementById('defIOFieldY').value) || 40,
+            width: parseInt(document.getElementById('defIOFieldWidth').value) || 120,
+            height: parseInt(document.getElementById('defIOFieldHeight').value) || 25
+        };
+        
    } else if (shapeType === 'ellipse' || shapeType === 'rectangle') {
         // Ellipse and Rectangle use x, y, w, h format - read from properties panel
         newShape.f1 = document.getElementById('borderColor').value || '#000000'; // border color

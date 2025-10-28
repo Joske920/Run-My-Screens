@@ -315,8 +315,80 @@
                                     <option value="li3">li3: Check with respect to min. and max.</option>
                                 </select>
                             </div>
+                            <div class="text-field-group">
+                                <label for="defChangeMethod" class="sub-label">Calling the CHANGE method:</label>
+                                <select id="defChangeMethod">
+                                    <option value="">None</option>
+                                    <option value="cb0">cb0: CHANGE method triggered when screen is displayed (default)</option>
+                                    <option value="cb1">cb1: CHANGE method not explicitly triggered on display</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defEmptyInput" class="sub-label">Empty Input (EI):</label>
+                                <select id="defEmptyInput">
+                                    <option value="">None</option>
+                                    <option value="ei0">ei0: Standard - empty inputs accepted (default)</option>
+                                    <option value="ei1">ei1: Empty inputs lead to error status and undo</option>
+                                </select>
+                            </div>
                         </div>
                         <small class="help-text">Configure display and behavior properties (separated by commas, can appear in any order)</small>
+                    </div>
+
+                    <div class="control-group def-only">
+                        <label for="defHelpDisplay">Help display file:</label>
+                        <input type="text" id="defHelpDisplay" value="" placeholder="Enter PNG filename (e.g., help_image.png)">
+                        <small class="help-text">Name of the PNG file that appears when cursor is positioned on this variable (leave empty if not needed)</small>
+                    </div>
+
+                    <div class="control-group def-only">
+                        <label for="defSystemVariable">System or user variable:</label>
+                        <input type="text" id="defSystemVariable" value="" placeholder="Enter NC/PLC system or user variable">
+                        <small class="help-text">System or user data from the NC/PLC assigned to this variable (appears in double quotes)</small>
+                    </div>
+
+                    <div class="control-group def-only">
+                        <label>Position of short text:</label>
+                        <div class="control-row">
+                            <div class="control-half">
+                                <label for="defShortTextX">X Position:</label>
+                                <input type="number" id="defShortTextX" value="10" min="0" max="600" step="1">
+                            </div>
+                            <div class="control-half">
+                                <label for="defShortTextY">Y Position:</label>
+                                <input type="number" id="defShortTextY" value="20" min="0" max="400" step="1">
+                            </div>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-half">
+                                <label for="defShortTextWidth">Short text width:</label>
+                                <input type="number" id="defShortTextWidth" value="100" min="10" max="400" step="1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="control-group def-only">
+                        <label>Position of input/output field:</label>
+                        <div class="control-row">
+                            <div class="control-half">
+                                <label for="defIOFieldX">X Position:</label>
+                                <input type="number" id="defIOFieldX" value="50" min="0" max="600" step="1">
+                            </div>
+                            <div class="control-half">
+                                <label for="defIOFieldY">Y Position:</label>
+                                <input type="number" id="defIOFieldY" value="40" min="0" max="400" step="1">
+                            </div>
+                        </div>
+                        <div class="control-row">
+                            <div class="control-half">
+                                <label for="defIOFieldWidth">I/O field width:</label>
+                                <input type="number" id="defIOFieldWidth" value="120" min="10" max="400" step="1">
+                            </div>
+                            <div class="control-half">
+                                <label for="defIOFieldHeight">I/O field height:</label>
+                                <input type="number" id="defIOFieldHeight" value="25" min="10" max="100" step="1">
+                            </div>
+                        </div>
                     </div>
                     
                     <!-- Position and size properties (x,y,w,h) -->

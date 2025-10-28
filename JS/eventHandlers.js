@@ -332,6 +332,151 @@ function setupEventListeners() {
         }
     });
     
+    addEventListenerSafe('defChangeMethod', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing change method
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.changeMethod = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defEmptyInput', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing empty input
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.emptyInput = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    // DEF Help display file property handler
+    addEventListenerSafe('defHelpDisplay', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing help display
+                shape.helpDisplay = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    // DEF System or user variable property handler
+    addEventListenerSafe('defSystemVariable', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing system variable
+                shape.systemVariable = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    // DEF Position of short text property handlers
+    addEventListenerSafe('defShortTextX', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing short text X
+                if (!shape.shortTextPos) shape.shortTextPos = {};
+                shape.shortTextPos.x = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    addEventListenerSafe('defShortTextY', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing short text Y
+                if (!shape.shortTextPos) shape.shortTextPos = {};
+                shape.shortTextPos.y = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    addEventListenerSafe('defShortTextWidth', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing short text width
+                if (!shape.shortTextPos) shape.shortTextPos = {};
+                shape.shortTextPos.width = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    // DEF Position of input/output field property handlers
+    addEventListenerSafe('defIOFieldX', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing IO field X
+                if (!shape.ioFieldPos) shape.ioFieldPos = {};
+                shape.ioFieldPos.x = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    addEventListenerSafe('defIOFieldY', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing IO field Y
+                if (!shape.ioFieldPos) shape.ioFieldPos = {};
+                shape.ioFieldPos.y = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    addEventListenerSafe('defIOFieldWidth', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing IO field width
+                if (!shape.ioFieldPos) shape.ioFieldPos = {};
+                shape.ioFieldPos.width = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    addEventListenerSafe('defIOFieldHeight', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing IO field height
+                if (!shape.ioFieldPos) shape.ioFieldPos = {};
+                shape.ioFieldPos.height = parseInt(this.value) || 0;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
     addEventListenerSafe('borderStyle', 'change', function() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);

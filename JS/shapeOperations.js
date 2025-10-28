@@ -59,12 +59,34 @@ function addShape() {
     };
     
     if (shapeType === 'def') {
-        // DEF uses variableName, variableType, limits, defaultValue, and toggle format - read from properties panel
+        // DEF uses variableName, variableType, limits, defaultValue, toggle, and texts format - read from properties panel
         newShape.variableName = document.getElementById('defVariableName').value || 'variable';
         newShape.variableType = document.getElementById('defVariableType').value || 'I';
         newShape.limits = document.getElementById('defLimits').value || '';
         newShape.defaultValue = document.getElementById('defDefaultValue').value || '';
         newShape.toggle = document.getElementById('defToggle').value || '';
+        
+        // Add texts properties (all 5 fields)
+        newShape.texts = {
+            longText: document.getElementById('defLongText').value || '',
+            shortText: document.getElementById('defShortText').value || '',
+            graphicText: document.getElementById('defGraphicText').value || '',
+            unitText: document.getElementById('defUnitText').value || '',
+            tooltip: document.getElementById('defTooltip').value || ''
+        };
+        
+        // Add attributes properties (all 9 attribute types)
+        newShape.attributes = {
+            displayMode: document.getElementById('defDisplayMode').value || '',
+            displayOption: document.getElementById('defDisplayOption').value || '',
+            updateRate: document.getElementById('defUpdateRate').value || '',
+            toggleSymbol: document.getElementById('defToggleSymbol').value || '',
+            inputMode: document.getElementById('defInputMode').value || '',
+            accessLevel: document.getElementById('defAccessLevel').value || '',
+            alignment: document.getElementById('defAlignment').value || '',
+            fontSize: document.getElementById('defFontSize').value || '',
+            limitsCheck: document.getElementById('defLimitsCheck').value || ''
+        };
    } else if (shapeType === 'ellipse' || shapeType === 'rectangle') {
         // Ellipse and Rectangle use x, y, w, h format - read from properties panel
         newShape.f1 = document.getElementById('borderColor').value || '#000000'; // border color

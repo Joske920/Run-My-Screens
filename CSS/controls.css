@@ -318,3 +318,45 @@ h3 {
     background-color: #ffcccc !important;
     border-color: #dc3545 !important;
 }
+
+/* Texts container for DEF shapes */
+.texts-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f8f9fa;
+}
+
+/* Attributes container for DEF shapes */
+.attributes-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    margin-top: 5px;
+    background-color: #f8f9fa;
+}
+
+.text-field-group {
+    margin-bottom: 10px;
+}
+
+.text-field-group:last-child {
+    margin-bottom: 0;
+}
+
+.sub-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #495057;
+    margin-bottom: 3px;
+}
+
+.text-field-group input {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #ced4da;
+    border-radius: 3px;
+    font-size: 13px;
+}

@@ -126,6 +126,7 @@ function setupEventListeners() {
             if (shape && shape.type === 'def') {
                 saveStateToUndo(); // Save state before changing default value
                 shape.defaultValue = this.value;
+                updateShapesList(); // Update list to reflect new default value
                 saveState();
             }
         }
@@ -139,11 +140,196 @@ function setupEventListeners() {
             if (shape && shape.type === 'def') {
                 saveStateToUndo(); // Save state before changing toggle
                 shape.toggle = this.value;
+                updateShapesList(); // Update list to reflect new toggle
                 saveState();
             }
         }
         // Validate default value against new toggle options
         validateDefaultValue();
+    });
+    
+    // DEF Texts property handlers
+    addEventListenerSafe('defLongText', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing long text
+                if (!shape.texts) shape.texts = {};
+                shape.texts.longText = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defShortText', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing short text
+                if (!shape.texts) shape.texts = {};
+                shape.texts.shortText = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defGraphicText', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing graphic text
+                if (!shape.texts) shape.texts = {};
+                shape.texts.graphicText = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defUnitText', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing unit text
+                if (!shape.texts) shape.texts = {};
+                shape.texts.unitText = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defTooltip', 'input', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing tooltip
+                if (!shape.texts) shape.texts = {};
+                shape.texts.tooltip = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+
+    // DEF Attributes property handlers
+    addEventListenerSafe('defDisplayMode', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing display mode
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.displayMode = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defDisplayOption', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing display option
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.displayOption = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defUpdateRate', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing update rate
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.updateRate = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defToggleSymbol', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing toggle symbol
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.toggleSymbol = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defInputMode', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing input mode
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.inputMode = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defAccessLevel', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing access level
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.accessLevel = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defAlignment', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing alignment
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.alignment = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defFontSize', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing font size
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.fontSize = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
+    });
+    
+    addEventListenerSafe('defLimitsCheck', 'change', function() {
+        if (selectedShapeId !== null) {
+            const shape = getShapeById(selectedShapeId);
+            if (shape && shape.type === 'def') {
+                saveStateToUndo(); // Save state before changing limits check
+                if (!shape.attributes) shape.attributes = {};
+                shape.attributes.limitsCheck = this.value;
+                updateShapesList(); // Update the display
+                saveState();
+            }
+        }
     });
     
     addEventListenerSafe('borderStyle', 'change', function() {

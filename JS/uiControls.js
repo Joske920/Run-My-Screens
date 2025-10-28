@@ -12,12 +12,15 @@ function updateShapeControls() {
         updatePropertyVisibility(shape.type);
         
         if (shape.type === 'def') {
-            // DEF: uses variableName, variableType, limits, defaultValue, and toggle properties
+            // DEF: uses variableName, variableType, limits, defaultValue, toggle, and texts properties
             const defVariableName = document.getElementById('defVariableName');
             const defVariableType = document.getElementById('defVariableType');
             const defLimits = document.getElementById('defLimits');
             const defDefaultValue = document.getElementById('defDefaultValue');
             const defToggle = document.getElementById('defToggle');
+            const defShortText = document.getElementById('defShortText');
+            const defUnitText = document.getElementById('defUnitText');
+            const defTooltip = document.getElementById('defTooltip');
             
             if (defVariableName) defVariableName.value = shape.variableName || '';
             if (defVariableType) {
@@ -29,7 +32,71 @@ function updateShapeControls() {
             if (defDefaultValue) defDefaultValue.value = shape.defaultValue || '';
             if (defToggle) defToggle.value = shape.toggle || '';
             
-            // Validate default value against toggle options after loading
+            // Populate individual text fields
+            const defLongText = document.getElementById('defLongText');
+            const defGraphicText = document.getElementById('defGraphicText');
+            
+            if (shape.texts) {
+                if (defLongText) defLongText.value = shape.texts.longText || '';
+                if (defShortText) defShortText.value = shape.texts.shortText || '';
+                if (defGraphicText) defGraphicText.value = shape.texts.graphicText || '';
+                if (defUnitText) defUnitText.value = shape.texts.unitText || '';
+                if (defTooltip) defTooltip.value = shape.texts.tooltip || '';
+            } else {
+                if (defLongText) defLongText.value = '';
+                if (defShortText) defShortText.value = '';
+                if (defGraphicText) defGraphicText.value = '';
+                if (defUnitText) defUnitText.value = '';
+                if (defTooltip) defTooltip.value = '';
+            }
+            
+            // Populate attribute fields
+            const defDisplayMode = document.getElementById('defDisplayMode');
+            const defDisplayOption = document.getElementById('defDisplayOption');
+            const defUpdateRate = document.getElementById('defUpdateRate');
+            const defToggleSymbol = document.getElementById('defToggleSymbol');
+            const defInputMode = document.getElementById('defInputMode');
+            const defAccessLevel = document.getElementById('defAccessLevel');
+            const defAlignment = document.getElementById('defAlignment');
+            const defFontSize = document.getElementById('defFontSize');
+            const defLimitsCheck = document.getElementById('defLimitsCheck');
+            
+            if (shape.attributes) {
+                if (defDisplayMode) defDisplayMode.value = shape.attributes.displayMode || '';
+                if (defDisplayOption) defDisplayOption.value = shape.attributes.displayOption || '';
+                if (defUpdateRate) defUpdateRate.value = shape.attributes.updateRate || '';
+                if (defToggleSymbol) defToggleSymbol.value = shape.attributes.toggleSymbol || '';
+                if (defInputMode) defInputMode.value = shape.attributes.inputMode || '';
+                if (defAccessLevel) defAccessLevel.value = shape.attributes.accessLevel || '';
+                if (defAlignment) defAlignment.value = shape.attributes.alignment || '';
+                if (defFontSize) defFontSize.value = shape.attributes.fontSize || '';
+                if (defLimitsCheck) defLimitsCheck.value = shape.attributes.limitsCheck || '';
+            } else {
+                if (defDisplayMode) defDisplayMode.value = '';
+                if (defDisplayOption) defDisplayOption.value = '';
+                if (defUpdateRate) defUpdateRate.value = '';
+                if (defToggleSymbol) defToggleSymbol.value = '';
+                if (defInputMode) defInputMode.value = '';
+                if (defAccessLevel) defAccessLevel.value = '';
+                if (defAlignment) defAlignment.value = '';
+                if (defFontSize) defFontSize.value = '';
+                if (defLimitsCheck) defLimitsCheck.value = '';
+            }
+            
+        // Format texts part
+        let textsDisplay = '';
+        if (shape.texts) {
+            const textParts = [];
+            if (shape.texts.longText) textParts.push(shape.texts.longText);
+            if (shape.texts.shortText) textParts.push(shape.texts.shortText);
+            if (shape.texts.graphicText) textParts.push(shape.texts.graphicText);
+            if (shape.texts.unitText) textParts.push(shape.texts.unitText);
+            if (shape.texts.tooltip) textParts.push(shape.texts.tooltip);
+            
+            if (textParts.length > 0) {
+                textsDisplay = textParts.join(',');
+            }
+        }            // Validate default value against toggle options after loading
             validateDefaultValue();
         } else if (shape.type === 'ellipse' || shape.type === 'rectangle') {
             // Ellipse and Rectangle: both use x, y, w, h properties
@@ -297,7 +364,33 @@ function formatShapeProperties(shape) {
             const limitsText = shape.limits ? `/${shape.limits}` : '';
             const defaultText = shape.defaultValue ? `/${shape.defaultValue}` : '';
             const toggleText = shape.toggle ? `/${shape.toggle}` : '';
-            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}/)`;
+            
+            // Format texts: longText,shortText,graphicText,unitText,tooltip (all 5 fields with quotes only when content exists)
+            const texts = shape.texts || {};
+            const textsArray = [
+                texts.longText ? `"${texts.longText}"` : '',
+                texts.shortText ? `"${texts.shortText}"` : '',
+                texts.graphicText ? `"${texts.graphicText}"` : '',
+                texts.unitText ? `"${texts.unitText}"` : '', 
+                texts.tooltip ? `"${texts.tooltip}"` : ''
+            ];
+            const textsText = `/${textsArray.join(',')}`;
+            
+            // Format attributes: all 9 attribute types
+            const attributes = shape.attributes || {};
+            const attributesArray = [];
+            if (attributes.displayMode) attributesArray.push(attributes.displayMode);
+            if (attributes.displayOption) attributesArray.push(attributes.displayOption);
+            if (attributes.updateRate) attributesArray.push(attributes.updateRate);
+            if (attributes.toggleSymbol) attributesArray.push(attributes.toggleSymbol);
+            if (attributes.inputMode) attributesArray.push(attributes.inputMode);
+            if (attributes.accessLevel) attributesArray.push(attributes.accessLevel);
+            if (attributes.alignment) attributesArray.push(attributes.alignment);
+            if (attributes.fontSize) attributesArray.push(attributes.fontSize);
+            if (attributes.limitsCheck) attributesArray.push(attributes.limitsCheck);
+            const attributesText = attributesArray.length > 0 ? `/${attributesArray.join(',')}` : '';
+            
+            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}${textsText}${attributesText}/)`;
             
         case 'ellipse':
             const ellipseTag = shape.tag ? `,"${shape.tag}"` : ',';

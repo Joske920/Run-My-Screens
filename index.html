@@ -188,6 +188,137 @@
                         <small class="help-text">List with predetermined entries. Starts with * and entries separated by commas</small>
                     </div>
                     
+                    <div class="control-group def-only">
+                        <label for="defTexts">Texts:</label>
+                        <div class="texts-container">
+                            <div class="text-field-group">
+                                <label for="defLongText" class="sub-label">Long Text:</label>
+                                <input type="text" id="defLongText" value="" placeholder="Text in the display line (leave empty for now)">
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defShortText" class="sub-label">Short Text (Label):</label>
+                                <input type="text" id="defShortText" value="" placeholder="Name of the dialog element">
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defGraphicText" class="sub-label">Graphic Text:</label>
+                                <input type="text" id="defGraphicText" value="" placeholder="Text refers to terms in graphics (keep empty for now)">
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defUnitText" class="sub-label">Unit Text:</label>
+                                <input type="text" id="defUnitText" value="" placeholder='e.g. "mm", "inch"'>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defTooltip" class="sub-label">Tooltip:</label>
+                                <input type="text" id="defTooltip" value="" placeholder="Brief information for screen configuration">
+                            </div>
+                        </div>
+                        <small class="help-text">Long text: display line text, Short text: dialog label, Graphic text: graphics terms, Unit text: measurement unit, Tooltip: brief info</small>
+                    </div>
+
+                    <div class="control-group def-only">
+                        <label for="defAttributes">Attributes:</label>
+                        <div class="attributes-container">
+                            <div class="text-field-group">
+                                <label for="defDisplayMode" class="sub-label">Display mode:</label>
+                                <select id="defDisplayMode">
+                                    <option value="">None</option>
+                                    <option value="dt0">dt0: Standard (input/output field or toggle field) (default)</option>
+                                    <option value="dt1">dt1: Progress bar with color change</option>
+                                    <option value="dt2">dt2: Progress bar without color change in Operate style</option>
+                                    <option value="dt4">dt4: List field</option>
+                                    <option value="dt5">dt5: Password input mode (asterisk)</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defDisplayOption" class="sub-label">Display option:</label>
+                                <select id="defDisplayOption">
+                                    <option value="">None</option>
+                                    <option value="do0">do0: From left to right (default)</option>
+                                    <option value="do1">do1: From right to left</option>
+                                    <option value="do2">do2: From bottom to top</option>
+                                    <option value="do3">do3: From top to bottom</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defUpdateRate" class="sub-label">Update rate:</label>
+                                <select id="defUpdateRate">
+                                    <option value="">None</option>
+                                    <option value="ur0">ur0: SlCap::standardUpdateRate() (200 ms, default)</option>
+                                    <option value="ur1">ur1: 50 ms</option>
+                                    <option value="ur2">ur2: 100 ms</option>
+                                    <option value="ur3">ur3: 200 ms</option>
+                                    <option value="ur4">ur4: 500 ms</option>
+                                    <option value="ur5">ur5: 1000 ms</option>
+                                    <option value="ur6">ur6: 2000 ms</option>
+                                    <option value="ur7">ur7: 5000 ms</option>
+                                    <option value="ur8">ur8: 10000 ms</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defToggleSymbol" class="sub-label">Toggle symbol:</label>
+                                <select id="defToggleSymbol">
+                                    <option value="">None</option>
+                                    <option value="tg0">tg0: Toggle symbol off (default)</option>
+                                    <option value="tg1">tg1: Toggle symbol on</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defInputMode" class="sub-label">Input mode:</label>
+                                <select id="defInputMode">
+                                    <option value="">None</option>
+                                    <option value="wr0">wr0: IO field invisible, short text visible</option>
+                                    <option value="wr1">wr1: Read (no focus possible for input)</option>
+                                    <option value="wr2">wr2: Read and write (line appears in white) (default)</option>
+                                    <option value="wr3">wr3: wr1 with focus</option>
+                                    <option value="wr4">wr4: All variable elements invisible, no focus possible</option>
+                                    <option value="wr5">wr5: Value saved immediately on every keystroke</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defAccessLevel" class="sub-label">Access level:</label>
+                                <select id="defAccessLevel">
+                                    <option value="">None (can always be written)</option>
+                                    <option value="ac0">ac0: Reserved for Siemens</option>
+                                    <option value="ac1">ac1: Password Machine manufacturer</option>
+                                    <option value="ac2">ac2: Password Service</option>
+                                    <option value="ac3">ac3: Password User</option>
+                                    <option value="ac4">ac4: Keyswitch position 3 Programmer, machine setter</option>
+                                    <option value="ac5">ac5: Keyswitch position 2 Qualified operator</option>
+                                    <option value="ac6">ac6: Keyswitch position 1 Trained operator</option>
+                                    <option value="ac7">ac7: Keyswitch position 0 Semi-skilled operator (default)</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defAlignment" class="sub-label">Alignment of short text:</label>
+                                <select id="defAlignment">
+                                    <option value="">None</option>
+                                    <option value="al0">al0: Left-justified (default)</option>
+                                    <option value="al1">al1: Right-justified</option>
+                                    <option value="al2">al2: Centered</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defFontSize" class="sub-label">Font size:</label>
+                                <select id="defFontSize">
+                                    <option value="">None</option>
+                                    <option value="fs1">fs1: Default font size (8 pt.) (default)</option>
+                                    <option value="fs2">fs2: Double font size</option>
+                                </select>
+                            </div>
+                            <div class="text-field-group">
+                                <label for="defLimitsCheck" class="sub-label">Limits check:</label>
+                                <select id="defLimitsCheck">
+                                    <option value="">None (determined by specified limits)</option>
+                                    <option value="li0">li0: No check</option>
+                                    <option value="li1">li1: Check with respect to min.</option>
+                                    <option value="li2">li2: Check with respect to max.</option>
+                                    <option value="li3">li3: Check with respect to min. and max.</option>
+                                </select>
+                            </div>
+                        </div>
+                        <small class="help-text">Configure display and behavior properties (separated by commas, can appear in any order)</small>
+                    </div>
+                    
                     <!-- Position and size properties (x,y,w,h) -->
                     <div class="control-group control-row ellipse-rectangle-only">
                         <div class="control-half">

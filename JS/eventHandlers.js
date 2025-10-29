@@ -489,7 +489,7 @@ function setupEventListeners() {
         }
     });
 
-    addEventListenerSafe('borderColor', 'input', function() {
+    addEventListenerSafe('borderColor', 'change', function() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
@@ -505,7 +505,7 @@ function setupEventListeners() {
         }
     });
 
-    addEventListenerSafe('fillColor', 'input', function() {
+    addEventListenerSafe('fillColor', 'change', function() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape) {
@@ -703,7 +703,7 @@ function setupEventListeners() {
         }
     });
     
-    addEventListenerSafe('vSepColor', 'input', function() {
+    addEventListenerSafe('vSepColor', 'change', function() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape && shape.type === 'v_separator') {
@@ -785,7 +785,7 @@ function setupEventListeners() {
         }
     });
     
-    addEventListenerSafe('hSepColor', 'input', function() {
+    addEventListenerSafe('hSepColor', 'change', function() {
         if (selectedShapeId !== null) {
             const shape = getShapeById(selectedShapeId);
             if (shape && shape.type === 'h_separator') {
@@ -845,7 +845,7 @@ function setupEventListeners() {
     });
     
     // Background color control
-    addEventListenerSafe('backgroundColor', 'input', function() {
+    addEventListenerSafe('backgroundColor', 'change', function() {
         saveStateToUndo(); // Save state before background color change
         updateCanvas();
         saveState();
@@ -980,4 +980,106 @@ function handleKeyDown(e) {
         // Save the state
         saveState();
     }
+}
+
+// Color picker synchronization handlers - separate function to avoid scope issues
+function setupColorPickerSynchronization() {
+    // Helper function to safely add event listeners
+    function addEventListenerSafe(elementId, event, handler) {
+        const element = document.getElementById(elementId);
+        if (element) {
+            element.addEventListener(event, handler);
+        } else {
+            console.warn(`Element with ID '${elementId}' not found`);
+        }
+    }
+    // Background Color Picker sync
+    addEventListenerSafe('backgroundColor', 'change', function() {
+        const colorValue = convertSystemColor(this.value);
+        const picker = document.getElementById('backgroundColorPicker');
+        if (picker && colorValue.startsWith('#')) {
+            picker.value = colorValue;
+        }
+    });
+    
+    addEventListenerSafe('backgroundColorPicker', 'input', function() {
+        const selectElement = document.getElementById('backgroundColor');
+        if (selectElement) {
+            updateColorDropdownWithCustom('backgroundColor', this.value);
+            // Trigger the select's change event to update canvas
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
+    // Border Color Picker sync
+    addEventListenerSafe('borderColor', 'change', function() {
+        const colorValue = convertSystemColor(this.value);
+        const picker = document.getElementById('borderColorPicker');
+        if (picker && colorValue.startsWith('#')) {
+            picker.value = colorValue;
+        }
+    });
+    
+    addEventListenerSafe('borderColorPicker', 'input', function() {
+        const selectElement = document.getElementById('borderColor');
+        if (selectElement) {
+            updateColorDropdownWithCustom('borderColor', this.value);
+            // Trigger the select's change event to update shape
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
+    // Fill Color Picker sync
+    addEventListenerSafe('fillColor', 'change', function() {
+        const colorValue = convertSystemColor(this.value);
+        const picker = document.getElementById('fillColorPicker');
+        if (picker && colorValue.startsWith('#')) {
+            picker.value = colorValue;
+        }
+    });
+    
+    addEventListenerSafe('fillColorPicker', 'input', function() {
+        const selectElement = document.getElementById('fillColor');
+        if (selectElement) {
+            updateColorDropdownWithCustom('fillColor', this.value);
+            // Trigger the select's change event to update shape
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
+    // V Separator Color Picker sync
+    addEventListenerSafe('vSepColor', 'change', function() {
+        const colorValue = convertSystemColor(this.value);
+        const picker = document.getElementById('vSepColorPicker');
+        if (picker && colorValue.startsWith('#')) {
+            picker.value = colorValue;
+        }
+    });
+    
+    addEventListenerSafe('vSepColorPicker', 'input', function() {
+        const selectElement = document.getElementById('vSepColor');
+        if (selectElement) {
+            updateColorDropdownWithCustom('vSepColor', this.value);
+            // Trigger the select's change event to update shape
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
+
+    // H Separator Color Picker sync
+    addEventListenerSafe('hSepColor', 'change', function() {
+        const colorValue = convertSystemColor(this.value);
+        const picker = document.getElementById('hSepColorPicker');
+        if (picker && colorValue.startsWith('#')) {
+            picker.value = colorValue;
+        }
+    });
+    
+    addEventListenerSafe('hSepColorPicker', 'input', function() {
+        const selectElement = document.getElementById('hSepColor');
+        if (selectElement) {
+            updateColorDropdownWithCustom('hSepColor', this.value);
+            // Trigger the select's change event to update shape
+            selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+    });
 }

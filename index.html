@@ -29,7 +29,25 @@
             
             <div class="control-group">
                 <label for="backgroundColor">Background Color:</label>
-                <input type="color" id="backgroundColor" value="#ffffff">
+                <div style="display: flex; gap: 10px; align-items: center;">
+                    <select id="backgroundColor" style="flex: 1; min-width: 0;">
+                        <option value="#ffffff">10: White</option>
+                    </select>
+                    <input type="color" id="backgroundColorPicker" value="#ffffff" title="Visual color picker" style="width: 40px; height: 30px; flex-shrink: 0;">
+                </div>
+                <small class="help-text">Select a system color or use the color picker for custom RGB values</small>
+                <details style="margin-top: 10px;">
+                    <summary style="cursor: pointer; font-weight: bold;">System Color Reference</summary>
+                    <div style="margin-top: 8px; font-size: 12px; line-height: 1.4;">
+                        <strong>Common Colors:</strong><br>
+                        1: Black, 2: Orange, 3: Dark green, 4: Light gray, 5: Dark gray<br>
+                        6: Blue, 7: Red, 8: Brown, 9: Yellow, 10: White<br>
+                        <strong>System UI Colors:</strong><br>
+                        126: Black (focus font), 127: Light orange (focus bg), 128: Orange (focus)<br>
+                        129: Light gray (bg), 130: Blue (header), 131: Black (header font)<br>
+                        132: Turquoise (toggle bg), 133: Light blue (list bg)
+                    </div>
+                </details>
             </div>
             
             <h3>Canvas Actions</h3>
@@ -67,8 +85,35 @@
                     <button id="undoBtn" onclick="undo()" title="Undo (Ctrl+Z)" disabled>↶ Undo</button>
                     <button id="redoBtn" onclick="redo()" title="Redo (Ctrl+Y)" disabled>↷ Redo</button>
                 </div>
-                <div class="canvas-container">
-                    <canvas id="myCanvas" width="600" height="400"></canvas>
+                <!-- Canvas with buttons layout -->
+                <div class="canvas-with-buttons">
+                    <div class="canvas-and-vertical-buttons">
+                        <div class="canvas-container">
+                            <canvas id="myCanvas" width="600" height="400"></canvas>
+                        </div>
+                        <!-- 8 buttons vertical on the right of the canvas -->
+                        <div class="vertical-buttons">
+                            <button onclick="VS1()" class="vscanvasbutton"></button>
+                            <button onclick="VS2()" class="vscanvasbutton"></button>
+                            <button onclick="VS3()" class="vscanvasbutton"></button>
+                            <button onclick="VS4()" class="vscanvasbutton"></button>
+                            <button onclick="VS5()" class="vscanvasbutton"></button>
+                            <button onclick="VS6()" class="vscanvasbutton"></button>
+                            <button onclick="VS7()" class="vscanvasbutton"></button>
+                            <button onclick="VS8()" class="vscanvasbutton"></button>
+                        </div>
+                    </div>
+                    <!-- 8 buttons horizontal under the canvas -->
+                    <div class="horizontal-buttons">
+                        <button onclick="HS1()" class="hscanvasbutton"></button>
+                        <button onclick="HS2()" class="hscanvasbutton"></button>
+                        <button onclick="HS3()" class="hscanvasbutton"></button>
+                        <button onclick="HS4()" class="hscanvasbutton"></button>
+                        <button onclick="HS5()" class="hscanvasbutton"></button>
+                        <button onclick="HS6()" class="hscanvasbutton"></button>
+                        <button onclick="HS7()" class="hscanvasbutton"></button>
+                        <button onclick="HS8()" class="hscanvasbutton"></button>
+                    </div>
                 </div>
                 <div class="graphic-logic-section">
                     <h4 class="graphic-logic-title">Graphic Logic</h4>
@@ -417,12 +462,24 @@
                     <!-- Color properties (f1,f2) -->
                     <div class="control-group ellipse-rectangle-only line-only">
                         <label for="borderColor">Border Color (f1):</label>
-                        <input type="color" id="borderColor" value="#000000">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="borderColor" style="flex: 1; min-width: 0;">
+                                <option value="#000000">1: Black</option>
+                            </select>
+                            <input type="color" id="borderColorPicker" value="#000000" title="Visual color picker" style="width: 40px; height: 30px; flex-shrink: 0;">
+                        </div>
+                        <small class="help-text">Select a system color or use the color picker for custom RGB values</small>
                     </div>
                     
                     <div class="control-group ellipse-rectangle-only">
                         <label for="fillColor">Fill Color (f2):</label>
-                        <input type="color" id="fillColor" value="#ff0000">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="fillColor" style="flex: 1; min-width: 0;">
+                                <option value="#ff0000">7: Red</option>
+                            </select>
+                            <input type="color" id="fillColorPicker" value="#ff0000" title="Visual color picker" style="width: 40px; height: 30px; flex-shrink: 0;">
+                        </div>
+                        <small class="help-text">Select a system color or use the color picker for custom RGB values</small>
                     </div>
                     
                     <!-- Style property (s) -->
@@ -495,7 +552,13 @@
                     
                     <div class="control-group v-separator-only">
                         <label for="vSepColor">Color:</label>
-                        <input type="color" id="vSepColor" value="#000000">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="vSepColor" style="flex: 1; min-width: 0;">
+                                <option value="#000000">1: Black</option>
+                            </select>
+                            <input type="color" id="vSepColorPicker" value="#000000" title="Visual color picker" style="width: 40px; height: 30px; flex-shrink: 0;">
+                        </div>
+                        <small class="help-text">Select a system color or use the color picker for custom RGB values</small>
                     </div>
                     
                     <div class="control-group v-separator-only">
@@ -534,7 +597,13 @@
                     
                     <div class="control-group h-separator-only">
                         <label for="hSepColor">Color:</label>
-                        <input type="color" id="hSepColor" value="#000000">
+                        <div style="display: flex; gap: 10px; align-items: center;">
+                            <select id="hSepColor" style="flex: 1; min-width: 0;">
+                                <option value="#000000">1: Black</option>
+                            </select>
+                            <input type="color" id="hSepColorPicker" value="#000000" title="Visual color picker" style="width: 40px; height: 30px; flex-shrink: 0;">
+                        </div>
+                        <small class="help-text">Select a system color or use the color picker for custom RGB values</small>
                     </div>
                     
                     <div class="control-group h-separator-only">
@@ -566,6 +635,7 @@
     <!-- Load JavaScript modules in dependency order -->
     <!-- Core modules first -->
     <script src="JS/constants.js"></script>
+    <script src="JS/systemColors.js"></script>
     <script src="JS/appState.js"></script>
     
     <!-- Utility functions -->
@@ -579,6 +649,7 @@
     <script src="JS/undoRedo.js"></script>
     <script src="JS/dragDrop.js"></script>
     <script src="JS/eventHandlers.js"></script>
+    <script src="JS/canvasButtons.js"></script>
     
     <!-- Main initialization (must be last) -->
     <script src="JS/main.js"></script>

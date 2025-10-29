@@ -112,8 +112,8 @@ function addShape() {
         
    } else if (shapeType === 'ellipse' || shapeType === 'rectangle') {
         // Ellipse and Rectangle use x, y, w, h format - read from properties panel
-        newShape.f1 = document.getElementById('borderColor').value || '#000000'; // border color
-        newShape.f2 = document.getElementById('fillColor').value || '#ff0000';   // fill color
+        newShape.f1 = convertSystemColor(document.getElementById('borderColor').value) || '#000000'; // border color
+        newShape.f2 = convertSystemColor(document.getElementById('fillColor').value) || '#ff0000';   // fill color
         newShape.s = document.getElementById('borderStyle').value || '1';        // border style
         newShape.x = parseInt(document.getElementById('positionX').value) || 50;   // x-coordinate (top-left)
         newShape.y = parseInt(document.getElementById('positionY').value) || 50;   // y-coordinate (top-left)
@@ -132,7 +132,7 @@ function addShape() {
         newShape.y1 = parseInt(document.getElementById('lineY1').value) || 50;   // start y-coordinate
         newShape.x2 = parseInt(document.getElementById('lineX2').value) || 150;  // end x-coordinate
         newShape.y2 = parseInt(document.getElementById('lineY2').value) || 150;  // end y-coordinate
-        newShape.f = document.getElementById('borderColor').value || '#000000';   // line color
+        newShape.f = convertSystemColor(document.getElementById('borderColor').value) || '#000000';   // line color
         newShape.s = document.getElementById('borderStyle').value || '1';         // border style
         
         // New line properties
@@ -150,7 +150,7 @@ function addShape() {
         
         newShape.x = parseInt(vSepX?.value) || 300;          // x position (horizontal position)
         newShape.w = parseInt(vSepWidth?.value) || 2;        // line weight
-        newShape.color = vSepColor?.value || '#000000';      // color
+        newShape.color = convertSystemColor(vSepColor?.value) || '#000000';      // color
         newShape.pen = vSepPen?.value || '1';               // pen style
         
         // New v_separator properties
@@ -168,7 +168,7 @@ function addShape() {
         
         newShape.y = parseInt(hSepY?.value) || 200;          // y position (vertical position)
         newShape.h = parseInt(hSepHeight?.value) || 2;       // line weight (height/thickness)
-        newShape.color = hSepColor?.value || '#000000';      // color
+        newShape.color = convertSystemColor(hSepColor?.value) || '#000000';      // color
         newShape.pen = hSepPen?.value || '1';               // pen style
         
         // New h_separator properties
@@ -304,7 +304,7 @@ function getShapeById(id) {
 }
 
 function clearCanvas() {
-    const bgColor = document.getElementById('backgroundColor').value;
+    const bgColor = convertSystemColor(document.getElementById('backgroundColor').value);
     ctx.fillStyle = bgColor;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 }

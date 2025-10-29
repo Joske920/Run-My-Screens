@@ -29,14 +29,28 @@
     background-color: #0056b3;
 }
 
+/* Canvas with buttons layout */
+.canvas-with-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+}
+
+.canvas-and-vertical-buttons {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+}
+
 .canvas-container {
     background: transparent;
     border-radius: 0;
-    padding: 10px;
+    padding: 0;
     box-shadow: none;
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     overflow: hidden;
     flex: none;
 }
@@ -48,6 +62,39 @@ canvas {
     margin: 0 auto;
     cursor: default;
     user-select: none;
+}
+
+/* Canvas Buttons Styling */
+.vertical-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    align-self: stretch;
+    justify-content: center;
+}
+
+.horizontal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin-top: 2px;
+}
+
+.vscanvasbutton, .hscanvasbutton {
+    border: 1px solid #333;
+    cursor: pointer;
+    margin: 0;
+    padding: 0;
+    background-color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+.vscanvasbutton:hover, .hscanvasbutton:hover {
+    opacity: 0.8;
+}
+
+.vscanvasbutton:active, .hscanvasbutton:active {
+    opacity: 0.6;
 }
 
 /* Graphic Logic Section (within canvas panel) */

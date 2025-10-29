@@ -12,11 +12,24 @@ document.addEventListener('DOMContentLoaded', function() {
     updateCanvas();
     updateShapesList();
     
+    // Initialize color dropdowns with system colors
+    populateColorDropdown('backgroundColor', '#ffffff');
+    populateColorDropdown('borderColor', '#000000');
+    populateColorDropdown('fillColor', '#ff0000');
+    populateColorDropdown('vSepColor', '#000000');
+    populateColorDropdown('hSepColor', '#000000');
+    
     // Initialize property controls based on current state
     updateShapeControls(); // This will handle both selected shapes and default values
     
     // Add event listeners for real-time updates
     setupEventListeners();
+    
+    // Setup color picker synchronization
+    setupColorPickerSynchronization();
+    
+    // Initialize canvas buttons
+    initializeCanvasButtons();
     
     // Initialize undo/redo system
     initializeUndoSystem();

@@ -16,7 +16,7 @@ function updateCanvas() {
     const settings = getCanvasSettings();
     
     // Clear canvas and set background
-    ctx.fillStyle = settings.bgColor;
+    ctx.fillStyle = convertSystemColor(settings.bgColor);
     ctx.fillRect(0, 0, canvas.width, canvas.height);
     
     // Create a sorted copy for drawing only (respects z-order hierarchy)
@@ -49,6 +49,11 @@ function updateCanvas() {
             drawSelectionIndicator(selectedShape);
         }
     }
+    
+    // Update canvas buttons to match current canvas size and background
+    if (typeof updateCanvasButtons === 'function') {
+        updateCanvasButtons();
+    }
 }
 
 function drawShape(shape, isSelected = false) {
@@ -64,17 +69,17 @@ function drawShape(shape, isSelected = false) {
     
     // Set colors and line width based on shape type
     if (shape.type === 'line') {
-        ctx.strokeStyle = shape.f || '#000000'; // Line color (f)
+        ctx.strokeStyle = convertSystemColor(shape.f) || '#000000'; // Line color (f)
         ctx.lineWidth = 2;
     } else if (shape.type === 'v_separator') {
-        ctx.strokeStyle = shape.color || '#000000'; // V_SEPARATOR color
+        ctx.strokeStyle = convertSystemColor(shape.color) || '#000000'; // V_SEPARATOR color
         ctx.lineWidth = shape.w || 2; // V_SEPARATOR line weight
     } else if (shape.type === 'h_separator') {
-        ctx.strokeStyle = shape.color || '#000000'; // H_SEPARATOR color
+        ctx.strokeStyle = convertSystemColor(shape.color) || '#000000'; // H_SEPARATOR color
         ctx.lineWidth = shape.h || 2; // H_SEPARATOR line weight
     } else {
-        ctx.fillStyle = shape.f2 || shape.color || '#ff0000'; // Fill color (f2)
-        ctx.strokeStyle = shape.f1 || '#000000'; // Border color (f1)
+        ctx.fillStyle = convertSystemColor(shape.f2 || shape.color) || '#ff0000'; // Fill color (f2)
+        ctx.strokeStyle = convertSystemColor(shape.f1) || '#000000'; // Border color (f1)
         ctx.lineWidth = 2;
     }
     

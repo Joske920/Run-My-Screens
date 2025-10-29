@@ -147,8 +147,18 @@ function updateShapeControls() {
             validateDefaultValue();
         } else if (shape.type === 'ellipse' || shape.type === 'rectangle') {
             // Ellipse and Rectangle: both use x, y, w, h properties
-            document.getElementById('borderColor').value = shape.f1 || '#000000';
-            document.getElementById('fillColor').value = shape.f2 || '#ff0000';
+            const borderColor = convertSystemColor(shape.f1 || '#000000');
+            const fillColor = convertSystemColor(shape.f2 || '#ff0000');
+            
+            // Populate dropdowns and set selected values
+            populateColorDropdown('borderColor', shape.f1 || '#000000');
+            populateColorDropdown('fillColor', shape.f2 || '#ff0000');
+            
+            // Sync color pickers
+            const borderPicker = document.getElementById('borderColorPicker');
+            const fillPicker = document.getElementById('fillColorPicker');
+            if (borderPicker) borderPicker.value = borderColor;
+            if (fillPicker) fillPicker.value = fillColor;
             document.getElementById('positionX').value = shape.x;
             document.getElementById('positionY').value = shape.y;
             document.getElementById('shapeWidth').value = shape.w || 100;
@@ -166,7 +176,14 @@ function updateShapeControls() {
             }
         } else if (shape.type === 'line') {
             // Line: uses x1, y1, x2, y2, f, tag, visible properties
-            document.getElementById('borderColor').value = shape.f || '#000000';
+            const lineColor = convertSystemColor(shape.f || '#000000');
+            
+            // Populate dropdown and set selected value
+            populateColorDropdown('borderColor', shape.f || '#000000');
+            
+            // Sync color picker
+            const borderPicker = document.getElementById('borderColorPicker');
+            if (borderPicker) borderPicker.value = lineColor;
             document.getElementById('lineX1').value = shape.x1 || 50;
             document.getElementById('lineY1').value = shape.y1 || 50;
             document.getElementById('lineX2').value = shape.x2 || 150;
@@ -191,8 +208,14 @@ function updateShapeControls() {
             
             if (vSepX) vSepX.value = shape.x || 300;
             if (vSepWidth) vSepWidth.value = shape.w || 2;
-            if (vSepColor) vSepColor.value = shape.color || '#000000';
             if (vSepPen) vSepPen.value = shape.pen || '1';
+            
+            // Populate dropdown and set selected value
+            populateColorDropdown('vSepColor', shape.color || '#000000');
+            
+            // Sync color picker
+            const vSepColorPicker = document.getElementById('vSepColorPicker');
+            if (vSepColorPicker) vSepColorPicker.value = convertSystemColor(shape.color || '#000000');
             
             // New v_separator properties
             const vSepTag = document.getElementById('vSepTag');
@@ -213,8 +236,14 @@ function updateShapeControls() {
             
             if (hSepY) hSepY.value = shape.y || 200;
             if (hSepHeight) hSepHeight.value = shape.h || 2;
-            if (hSepColor) hSepColor.value = shape.color || '#000000';
             if (hSepPen) hSepPen.value = shape.pen || '1';
+            
+            // Populate dropdown and set selected value
+            populateColorDropdown('hSepColor', shape.color || '#000000');
+            
+            // Sync color picker
+            const hSepColorPicker = document.getElementById('hSepColorPicker');
+            if (hSepColorPicker) hSepColorPicker.value = convertSystemColor(shape.color || '#000000');
             
             // New h_separator properties
             const hSepTag = document.getElementById('hSepTag');
@@ -236,6 +265,11 @@ function updateShapeControls() {
         if (shapeType === 'ellipse' || shapeType === 'rectangle') {
             document.getElementById('borderColor').value = '#000000';
             document.getElementById('fillColor').value = '#ff0000';
+            // Sync color pickers
+            const borderPicker = document.getElementById('borderColorPicker');
+            const fillPicker = document.getElementById('fillColorPicker');
+            if (borderPicker) borderPicker.value = '#000000';
+            if (fillPicker) fillPicker.value = '#ff0000';
             document.getElementById('borderStyle').value = '1';
             document.getElementById('positionX').value = 50;
             document.getElementById('positionY').value = 50;
@@ -253,6 +287,9 @@ function updateShapeControls() {
             }
         } else if (shapeType === 'line') {
             document.getElementById('borderColor').value = '#000000';
+            // Sync color picker
+            const borderPicker = document.getElementById('borderColorPicker');
+            if (borderPicker) borderPicker.value = '#000000';
             document.getElementById('borderStyle').value = '1';
             document.getElementById('lineX1').value = 50;
             document.getElementById('lineY1').value = 50;
@@ -278,6 +315,9 @@ function updateShapeControls() {
             if (vSepWidth) vSepWidth.value = 2;
             if (vSepColor) vSepColor.value = '#000000';
             if (vSepPen) vSepPen.value = '1';
+            // Sync color picker
+            const vSepColorPicker = document.getElementById('vSepColorPicker');
+            if (vSepColorPicker) vSepColorPicker.value = '#000000';
             
             // Default values for new v_separator properties
             const vSepTag = document.getElementById('vSepTag');
@@ -298,6 +338,9 @@ function updateShapeControls() {
             if (hSepHeight) hSepHeight.value = 2;
             if (hSepColor) hSepColor.value = '#000000';
             if (hSepPen) hSepPen.value = '1';
+            // Sync color picker
+            const hSepColorPicker = document.getElementById('hSepColorPicker');
+            if (hSepColorPicker) hSepColorPicker.value = '#000000';
             
             // Default values for new h_separator properties
             const hSepTag = document.getElementById('hSepTag');
@@ -408,9 +451,9 @@ function updatePropertyVisibility(shapeType) {
 function formatShapeProperties(shape) {
     switch(shape.type) {
         case 'def':
-            const limitsText = shape.limits ? `/${shape.limits}` : '';
-            const defaultText = shape.defaultValue ? `/${shape.defaultValue}` : '';
-            const toggleText = shape.toggle ? `/${shape.toggle}` : '';
+            const limitsText = shape.limits ? `${shape.limits}` : '';
+            const defaultText = shape.defaultValue ? `${shape.defaultValue}` : '';
+            const toggleText = shape.toggle ? `${shape.toggle}` : '';
             
             // Format texts: longText,shortText,graphicText,unitText,tooltip (all 5 fields with quotes only when content exists)
             const texts = shape.texts || {};
@@ -421,7 +464,7 @@ function formatShapeProperties(shape) {
                 texts.unitText ? `"${texts.unitText}"` : '', 
                 texts.tooltip ? `"${texts.tooltip}"` : ''
             ];
-            const textsText = `/${textsArray.join(',')}`;
+            const textsText = `${textsArray.join(',')}`;
             
             // Format attributes: all 11 attribute types
             const attributes = shape.attributes || {};
@@ -437,13 +480,13 @@ function formatShapeProperties(shape) {
             if (attributes.limitsCheck) attributesArray.push(attributes.limitsCheck);
             if (attributes.changeMethod) attributesArray.push(attributes.changeMethod);
             if (attributes.emptyInput) attributesArray.push(attributes.emptyInput);
-            const attributesText = attributesArray.length > 0 ? `/${attributesArray.join(',')}` : '';
+            const attributesText = attributesArray.length > 0 ? `${attributesArray.join(',')}` : '';
             
             // Format help display file (with quotes if exists)
-            const helpDisplayText = shape.helpDisplay ? `/"${shape.helpDisplay}"` : '/';
+            const helpDisplayText = shape.helpDisplay ? `"${shape.helpDisplay}"` : '';
             
             // Format system variable (with quotes if exists)
-            const systemVariableText = shape.systemVariable ? `/"${shape.systemVariable}"` : '/';
+            const systemVariableText = shape.systemVariable ? `"${shape.systemVariable}"` : '';
             
             // Format position properties from individual fields
             let shortTextPosText = '';
@@ -451,7 +494,7 @@ function formatShapeProperties(shape) {
                 const x = shape.shortTextPos.x || 0;
                 const y = shape.shortTextPos.y || 0;
                 const w = shape.shortTextPos.width || 0;
-                shortTextPosText = `/${x},${y},${w}`;
+                shortTextPosText = `${x},${y},${w}`;
             }
             
             let ioFieldPosText = '';
@@ -460,10 +503,10 @@ function formatShapeProperties(shape) {
                 const y = shape.ioFieldPos.y || 0;
                 const w = shape.ioFieldPos.width || 0;
                 const h = shape.ioFieldPos.height || 0;
-                ioFieldPosText = `/${x},${y},${w},${h}`;
+                ioFieldPosText = `${x},${y},${w},${h}`;
             }
             
-            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}${limitsText}${defaultText}${toggleText}${textsText}${attributesText}${helpDisplayText}${systemVariableText}${shortTextPosText}${ioFieldPosText}/)`;
+            return `DEF ${shape.variableName || 'variable'} (${shape.variableType || 'I'}/${limitsText}/${defaultText}/${toggleText}/${textsText}/${attributesText}/${helpDisplayText}/${systemVariableText}/${shortTextPosText}/${ioFieldPosText}/)`;
             
         case 'ellipse':
             const ellipseTag = shape.tag ? `,"${shape.tag}"` : ',';

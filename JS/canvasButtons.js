@@ -18,7 +18,7 @@ function updateCanvasButtons() {
     const canvasHeight = canvas.height;
     
     // Calculate button dimensions (1/8 of canvas size)
-    const buttonWidth = Math.floor(canvasWidth / 8);
+    const buttonWidth = Math.floor(canvasWidth / 7);
     const buttonHeight = Math.floor(canvasHeight / 8);
     
     // Get the background color (convert system color to RGB if needed)
